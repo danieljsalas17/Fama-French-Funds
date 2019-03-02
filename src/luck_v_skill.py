@@ -100,6 +100,7 @@ class AlphaEvaluator:
         '''
         self._is_fit = False
         self._has_sim = False
+        self._has_percentiles = None
         self.parse_dates = parse_dates
 
         if (fund_data is None) and (factor_data is None):
@@ -130,6 +131,7 @@ class AlphaEvaluator:
         self.parse_dates = parse_dates
         self._is_fit = False
         self._has_sim = False
+        self._has_percentiles = None
 
         # check for data
         if (fund_data is None) or (factor_data is None):
@@ -165,10 +167,13 @@ class AlphaEvaluator:
         if you also pass fund and factor names, or paths to .csv files.
 
         OUTPUT: self
+
+        UPDATE DOC STRING
         '''
         # check for updates to parameters
         self.min_obs = min_obs
         self._has_sim = False
+        self._has_percentiles = None
 
         # check for data
         if len(load_kwgs.keys()):
@@ -224,7 +229,10 @@ class AlphaEvaluator:
         sim_cutoff=15,**fitkwgs):
         '''Simulate fund returns. Stores the simulation results under the
         attributes with _sim suffix.
+
+        UPDATE DOC STRING
         '''
+        self._has_percentiles = None
         if random_seed is not None:
             np.random.seed(seed=random_seed)
 
@@ -315,17 +323,18 @@ class AlphaEvaluator:
 
         return self
 
-    def get_percentiles(self,pct_range=np.arange(1,10)/10,top_n=5,verbose=False,**simkwgs):
+    def get_percentiles(self,pct_range=np.arange(1,10)/10,top_n=5,
+                        verbose=False,sim_percentiles=True,**simkwgs):
         '''Adds/updates tables of percentiles of actual data vs simulated to the
         AlphaEvaluator can be found under attributes: data_a and data_t
+
+        UPDATE DOC STRING
         '''
-        if not self._has_sim:
+        if (not self._has_sim) and (sim_percentiles):
             if verbose:
                 print("Must have simulated data first. Simulating now...")
                 print("This could take some time...")
             self.simulate(**simkwgs)
-
-        n_simulations = self.n_simulations
 
         # percentile parameters
         percentages = pct_range
@@ -341,7 +350,7 @@ class AlphaEvaluator:
             elif i==1:
                 idx_b.append('3rd')
             else:
-                idx_b.append('{}th'.format(i))
+                idx_b.append('{}th'.format(i+2))
         idx_t = idx_b[::-1]
         idx_t[-1] ='Best'
         idx_m = ['{}%'.format(int(pct*100)) for pct in pct_range]
@@ -349,7 +358,7 @@ class AlphaEvaluator:
         idx_series = pd.Series(idx)
 
         # data to store results
-        data_cols = ['Actual','Sim Avg','%<Act']
+        data_cols = ['Actual']
 
         data_a = pd.DataFrame([], index=idx, columns=data_cols) # alphas
         data_t = pd.DataFrame([], index=idx, columns=data_cols) # t-statistics
@@ -371,154 +380,180 @@ class AlphaEvaluator:
                               temp_sorted_orig_t.T.head(top_n).iloc[::-1]]
         data_t['Actual'] = np.vstack(percentiles_orig_t)
 
-        # add insights from simulations
-        # sorted simulations by alphas and t-stats
-        temp_sort_asc_sim_a = np.sort(self._coeff_sim[0,:,:].T, axis=1)
-        temp_sort_asc_sim_t = np.sort(self._tstats_sim[0,:,:].T, axis=1)
-        temp_percentiles_sim_a = np.concatenate((temp_sort_asc_sim_a.T[0:5,:], \
-                                 np.percentile(self._coeff_sim[0,:,:].T, percentages1, axis = 1), \
-                                 temp_sort_asc_sim_a.T[-5:,:]))
-        temp_percentiles_sim_t = np.concatenate((temp_sort_asc_sim_t.T[0:5,:], \
-                                 np.percentile(self._tstats_sim[0,:,:].T, percentages1, axis = 1), \
-                                 temp_sort_asc_sim_t.T[-5:,:]))
-        mean_percentiles_sim_a = np.nanmean(temp_percentiles_sim_a, axis=1)
-        mean_percentiles_sim_t = np.nanmean(temp_percentiles_sim_t, axis=1)
+        if sim_percentiles:
+            # parameters
+            n_simulations = self.n_simulations
 
-        sim_smaller_a = np.sum(temp_percentiles_sim_a < \
-                               np.tile(np.vstack(percentiles_orig_a),
-                                       (1,n_simulations)), axis=1)/n_simulations*100
-        sim_smaller_t = np.sum(temp_percentiles_sim_t < \
-                               np.tile(np.vstack(percentiles_orig_t),
-                                       (1,n_simulations)), axis=1)/n_simulations*100
+            # add insights from simulations
+            # sorted simulations by alphas and t-stats
+            temp_sort_asc_sim_a = np.sort(self._coeff_sim[0,:,:].T, axis=1)
+            temp_sort_asc_sim_t = np.sort(self._tstats_sim[0,:,:].T, axis=1)
+            temp_percentiles_sim_a = np.concatenate((temp_sort_asc_sim_a.T[0:5,:], \
+                                     np.percentile(self._coeff_sim[0,:,:].T, percentages1, axis = 1), \
+                                     temp_sort_asc_sim_a.T[-5:,:]))
+            temp_percentiles_sim_t = np.concatenate((temp_sort_asc_sim_t.T[0:5,:], \
+                                     np.percentile(self._tstats_sim[0,:,:].T, percentages1, axis = 1), \
+                                     temp_sort_asc_sim_t.T[-5:,:]))
+            mean_percentiles_sim_a = np.nanmean(temp_percentiles_sim_a, axis=1)
+            mean_percentiles_sim_t = np.nanmean(temp_percentiles_sim_t, axis=1)
+            sim_smaller_a = np.sum(temp_percentiles_sim_a < \
+                                   np.tile(np.vstack(percentiles_orig_a),
+                                           (1,n_simulations)), axis=1)/n_simulations*100
+            sim_smaller_t = np.sum(temp_percentiles_sim_t < \
+                                   np.tile(np.vstack(percentiles_orig_t),
+                                           (1,n_simulations)), axis=1)/n_simulations*100
+            if verbose:
+                print("Populating data tables...")
 
-        if verbose:
-            print("Populating data tables...")
+            # Collecting alpha data
+            data_a['Sim Avg'] = mean_percentiles_sim_a
+            data_a['%<Act'] = sim_smaller_a
 
+            # Collecting t-stat data
+            data_t['Sim Avg'] = mean_percentiles_sim_t
+            data_t['%<Act'] = sim_smaller_t
 
-        # Collecting alpha data
-        data_a['Sim Avg'] = mean_percentiles_sim_a
-        data_a['%<Act'] = sim_smaller_a
-
-        # Collecting t-stat data
-        data_t['Sim Avg'] = mean_percentiles_sim_t
-        data_t['%<Act'] = sim_smaller_t
+            self._has_percentiles = 'simulated'
+        else:
+            self._has_percentiles = 'original'
 
         self.data_a = data_a
         self.data_t = data_t
 
+
         return self
 
-# #-------------------------------------------------------------------------------
-# # PLOTTING TOOLS
-# #-------------------------------------------------------------------------------
-# # Generate CDF plot for alphas:
-#     def plot_cdf(self,*args,**kwargs):
-#
-#         prct = np.arange(1,100,1)
-#
-#         # arrays for plots
-#         alphas_orig = self._coeff.T['Alpha']
-#         alphas_sim  = self._coeff_sim[0,:,:].flatten()
-#         tstats_orig = self._tstats.T['t(Alpha)']
-#         tstats_sim  = self._tstats_sim[0,:,:].flatten()
-#         alphas_sim_prct = np.nanmean(np.percentile(self._coeff_sim[0,:,:], prct,
-#                                                    axis=0), axis=1)
-#         tstats_sim_prct = np.nanmean(np.percentile(self._tstats_sim[0,:,:], prct,
-#                                                    axis=0), axis=1)
-#
-# # Generate CDF plot for alphas:
-#
-# # compute the ECDF of the samples
-# qe, pe = ecdf(alphas_sim_prct)
-# q, p = ecdf(alphas_orig)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(8,6))
-# ax.plot(q, p, '-k', lw=2, label='Actual CDF')
-# ax.plot(qe, pe, '-r', lw=2, label='Simulated alpha CDF')
-# ax.set_xlabel('alpha')
-# ax.set_ylabel('Cumulative probability')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nEmpirical CDF for actual and simulated alpha', fontsize=15,fontweight='bold')
-# plt.show()
-#
-# # Generate CDF plot for t(alphas):
-# # compute the ECDF of the samples
-# qe, pe = ecdf(tstats_sim_prct)
-# qt, pt = ecdf(tstats_orig)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(8,6))
-# ax.plot(qt, pt, '-k', lw=2, label='Actual CDF')
-# ax.plot(qe, pe, '-r', lw=2, label='Simulated t(alpha) CDF')
-# ax.set_xlabel('t(alpha)')
-# ax.set_ylabel('Cumulative probability')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nEmpirical CDF for actual and simulated t(alpha)', fontsize=15,fontweight='bold')
-# plt.show()
-#
-# #   Generate Kernel smoothing density estimate plot for alphas:
-#
-# kde1 = stats.gaussian_kde(alphas_orig)
-# kde2 = stats.gaussian_kde(alphas_sim_prct)
-# x1 = np.linspace(alphas_orig.min(), alphas_orig.max(), 100)
-# x2 = np.linspace(alphas_sim_prct.min(), alphas_sim_prct.max(), 100)
-# p1 = kde1(x1)
-# p2 = kde2(x2)
-#
-# fig, ax = plt.subplots(1, 1, figsize=(9,6))
-# ax.plot(x1, p1, '-k', lw=2, label='Actual')
-# ax.plot(x2, p2, '-r', lw=2, label='Simulated')
-# ax.set_xlabel('Alpha %')
-# ax.set_ylabel('Frequency')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nKernel smoothing density estimate for actual and simulated alpha',
-#           fontsize=15,fontweight='bold')
-# plt.show()
-#
-#
-# # Generate Kernel smoothing density estimate plot for t-stats of alpha
-# kde3 = stats.gaussian_kde(tstats_orig)
-# kde4 = stats.gaussian_kde(tstats_sim_prct)
-# x3 = np.linspace(tstats_orig.min(), tstats_orig.max(), 100)
-# x4 = np.linspace(tstats_sim_prct.min(), tstats_sim_prct.max(), 100)
-# p3 = kde3(x3)
-# p4 = kde4(x4)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(9,6))
-# ax.plot(x3, p3, '-k', lw=2, label='Actual')
-# ax.plot(x4, p4, '-r', lw=2, label='Simulated')
-# ax.set_xlabel('t(-alpha)')
-# ax.set_ylabel('Frequency')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nKernel smoothing density estimate for actual and simulated t(alpha)',
-#           fontsize=15,fontweight='bold')
-# plt.show()
-#
-# # HISTOGRAMS
-# temp_input = -1
+#-------------------------------------------------------------------------------
+# PLOTTING TOOLS
+#-------------------------------------------------------------------------------
+# Generate CDF plot for alphas:
+    def plot(self,type,statistic,fund=-1,*args,**kwargs):
+        '''UPDATE DOC STRING'''
+        prct = np.arange(1,100,1)
+
+        # arrays for plots
+        alphas_orig = self._coeff.T['Alpha']
+        alphas_sim  = self._coeff_sim[0,:,:].flatten()
+        tstats_orig = self._tstats.T['t(Alpha)']
+        tstats_sim  = self._tstats_sim[0,:,:].flatten()
+        alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:], prct, axis=0)
+        tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
+        alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
+        tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+
+        # IMPLEMENT: function to call other plot functions dependent on type
+        return figs, axes
+
+    def plot_cdf(self,statistic,*args,**kwargs):
+        '''UPDATE DOC STRING'''
+        prct = np.arange(1,100,1)
+
+        # arrays for plots
+        alphas_orig = self._coeff.T['Alpha']
+        alphas_sim  = self._coeff_sim[0,:,:].flatten()
+        tstats_orig = self._tstats.T['t(Alpha)']
+        tstats_sim  = self._tstats_sim[0,:,:].flatten()
+        alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:], prct, axis=0)
+        tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
+        alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
+        tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+
+        return figs, axes
+# Generate CDF plot for alphas:
+
+# compute the ECDF of the samples
+qe, pe = ecdf(alphas_sim_prct_mean)
+q, p = ecdf(alphas_orig)
+
+# plot
+fig, ax = plt.subplots(1, 1, figsize=(8,6))
+ax.plot(q, p, '-k', lw=2, label='Actual CDF')
+ax.plot(qe, pe, '-r', lw=2, label='Simulated alpha CDF')
+ax.set_xlabel('alpha')
+ax.set_ylabel('Cumulative probability')
+ax.legend(fancybox=True, loc='right')
+plt.title('\n\nEmpirical CDF for actual and simulated alpha', fontsize=15,fontweight='bold')
+plt.show()
+
+# Generate CDF plot for t(alphas):
+# compute the ECDF of the samples
+qe, pe = ecdf(tstats_sim_prct_mean)
+qt, pt = ecdf(tstats_orig)
+
+# plot
+fig, ax = plt.subplots(1, 1, figsize=(8,6))
+ax.plot(qt, pt, '-k', lw=2, label='Actual CDF')
+ax.plot(qe, pe, '-r', lw=2, label='Simulated t(alpha) CDF')
+ax.set_xlabel('t(alpha)')
+ax.set_ylabel('Cumulative probability')
+ax.legend(fancybox=True, loc='right')
+plt.title('\n\nEmpirical CDF for actual and simulated t(alpha)', fontsize=15,fontweight='bold')
+plt.show()
+
+#   Generate Kernel smoothing density estimate plot for alphas:
+
+kde1 = stats.gaussian_kde(alphas_orig)
+kde2 = stats.gaussian_kde(alphas_sim_prct_mean)
+x1 = np.linspace(alphas_orig.min(), alphas_orig.max(), 100)
+x2 = np.linspace(alphas_sim_prct_mean.min(), alphas_sim_prct_mean.max(), 100)
+p1 = kde1(x1)
+p2 = kde2(x2)
+
+fig, ax = plt.subplots(1, 1, figsize=(9,6))
+ax.plot(x1, p1, '-k', lw=2, label='Actual')
+ax.plot(x2, p2, '-r', lw=2, label='Simulated')
+ax.set_xlabel('Alpha %')
+ax.set_ylabel('Frequency')
+ax.legend(fancybox=True, loc='right')
+plt.title('\n\nKernel smoothing density estimate for actual and simulated alpha',
+          fontsize=15,fontweight='bold')
+plt.show()
+
+
+# Generate Kernel smoothing density estimate plot for t-stats of alpha
+kde3 = stats.gaussian_kde(tstats_orig)
+kde4 = stats.gaussian_kde(tstats_sim_prct_mean)
+x3 = np.linspace(tstats_orig.min(), tstats_orig.max(), 100)
+x4 = np.linspace(tstats_sim_prct_mean.min(), tstats_sim_prct_mean.max(), 100)
+p3 = kde3(x3)
+p4 = kde4(x4)
+
+# plot
+fig, ax = plt.subplots(1, 1, figsize=(9,6))
+ax.plot(x3, p3, '-k', lw=2, label='Actual')
+ax.plot(x4, p4, '-r', lw=2, label='Simulated')
+ax.set_xlabel('t(-alpha)')
+ax.set_ylabel('Frequency')
+ax.legend(fancybox=True, loc='right')
+plt.title('\n\nKernel smoothing density estimate for actual and simulated t(alpha)',
+          fontsize=15,fontweight='bold')
+plt.show()
+
+# HISTOGRAMS
+# temp_input needs to be the percentile of choice
+# example: best = -1, worst = 0
+temp_t = self.iloc[:,0].values[temp_input]
 # temp_t = np.vstack(percentiles_orig_t)[temp_input]
-#
-# # BEST
-# plt.figure(figsize=(9,6))
-# result = plt.hist(temp_percentiles_sim_t[temp_input,:][~np.isnan(temp_percentiles_sim_t[temp_input,:])],
-#                   bins=25, color='c', edgecolor='k', alpha=0.65)
-# plt.axvline(np.vstack(percentiles_orig_t)[temp_input], color='k', linestyle='dashed', linewidth=1)
-# plt.title('\n\nBootstrapped t-statistics of t(alpha): Best fund', fontsize=15, fontweight='bold')
-# labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
-# plt.legend(labels)
-# plt.show()
-#
-# # WORST
-# temp_input = 0
-# temp_t = np.vstack(percentiles_orig_t)[temp_input]
-#
-# plt.figure(figsize=(9,6))
-# result = plt.hist(temp_percentiles_sim_t[temp_input,:][~np.isnan(temp_percentiles_sim_t[temp_input,:])],
-#                   bins=25, color='c', edgecolor='k', alpha=0.65)
-# plt.axvline(np.vstack(percentiles_orig_t)[temp_input], color='k', linestyle='dashed', linewidth=1)
-# plt.title('\n\nBootstrapped t-statistics of t(alpha): Worst fund', fontsize=15, fontweight='bold')
-# labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
-# plt.legend(labels)
-# plt.show()
+
+# BEST
+plt.figure(figsize=(9,6))
+result = plt.hist(tstats_sim_prct[temp_input,:][~np.isnan(tstats_sim_prct[temp_input,:])],
+                  bins=25, color='c', edgecolor='k', alpha=0.65)
+plt.axvline(temp_t, color='k', linestyle='dashed', linewidth=1)
+plt.title('\n\nBootstrapped t-statistics of t(alpha): Best fund', fontsize=15, fontweight='bold')
+labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
+plt.legend(labels)
+plt.show()
+
+# WORST
+temp_input = 0
+temp_t = np.vstack(percentiles_orig_t)[temp_input]
+
+plt.figure(figsize=(9,6))
+result = plt.hist(temp_percentiles_sim_t[temp_input,:][~np.isnan(temp_percentiles_sim_t[temp_input,:])],
+                  bins=25, color='c', edgecolor='k', alpha=0.65)
+plt.axvline(np.vstack(percentiles_orig_t)[temp_input], color='k', linestyle='dashed', linewidth=1)
+plt.title('\n\nBootstrapped t-statistics of t(alpha): Worst fund', fontsize=15, fontweight='bold')
+labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
+plt.legend(labels)
+plt.show()
