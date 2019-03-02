@@ -12,11 +12,19 @@ import requests
 import io
 import seaborn as sns
 from matplotlib.patches import Rectangle
+import time
 sns.set()
 
 #-------------------------------------------------------------------------------
 # FUNCTIONS
 #-------------------------------------------------------------------------------
+
+def title_print(title,sep='-',*args,**kwargs):
+    print(sep*len(title))
+    print(title,*args,**kwargs)
+    print(sep*len(title))
+
+
 # Create function to calculate the lag selection parameter for the standard HAC Newey-West
 # (1994) plug-in procedure
 def mLag(no_obs):
@@ -74,7 +82,7 @@ class AlphaEvaluator:
     actual observations to simulated fund returns using a KAPM model.
     '''
     def __init__(self,fund_data=None,factor_data=None,
-                 parse_dates=['Date','Date'],fund_names=None,factor_names=None):
+        parse_dates=['Date','Date'],fund_names=None,factor_names=None):
         '''AlphaEvaluator is a class used to evaluate the alpha of funds.
         Calculates alpha of funds from provided datasets, runs simulations of
         fund returns, and compares actual observations to simulated fund returns
@@ -91,6 +99,7 @@ class AlphaEvaluator:
             - colname as string for each dataset that corresponds to datetime
         '''
         self._is_fit = False
+        self._has_sim = False
         self.parse_dates = parse_dates
 
         if (fund_data is None) and (factor_data is None):
@@ -102,7 +111,7 @@ class AlphaEvaluator:
                            parse_dates=parse_dates)
 
     def load_data(self,fund_data,factor_data,fund_names=None,factor_names=None,
-                  parse_dates=self.parse_dates):
+        parse_dates=self.parse_dates):
         '''Function for loading observed fund and factor data into the AlphaEvaluator
 
         INPUT
@@ -113,6 +122,8 @@ class AlphaEvaluator:
             - str is a path to a csv file
         fund_names, factor_names: None or list
             - only needed if np.array data is passed in
+
+        One of the factor names must be 'RF'
         '''
 
         # check for updates to parameters
@@ -142,13 +153,13 @@ class AlphaEvaluator:
                 self.Y_raw = pd.DataFrame(data=fund_data,columns=fund_names)
                 self.X_raw = pd.DataFrame(data=factor_data,columns=factor_names)
         else:
-            raise ValueError("Not sure what happened, but you did something wrong...")
+            print("Not sure what happened, but you did something wrong...")
 
         return self
 
 
     def fit(self,fund_data=self.Y_raw,factor_data=self.X_raw,fund_names=None,
-            factor_names=None,parse_dates=self.parse_dates,min_obs=120):
+        factor_names=None,parse_dates=self.parse_dates,min_obs=120):
         '''Fit regressions to the fund and factor data. If data not passed in yet,
         pass in fund_data and factor_data here. Takes, pd.DataFrames, np.arrays
         if you also pass fund and factor names, or paths to .csv files.
@@ -203,13 +214,93 @@ class AlphaEvaluator:
 
         self._is_fit = True
 
+
         return self
 
-    def simulate(self,verbose=False):
-        '''Simulate fund returns.
-        '''
-        pass
+    def simulate(self,n_simulations,seed=None,verbose=False,sim_std=0):
+        '''Simulate fund returns. Stores the simulation results under the
 
+
+        FILL DOC STRING
+        '''
+        start_time = time.time()
+
+        # parameters
+        n_obs = self.Y.shape[0]
+        n_factors = self.X.shape[1]
+        n_funds = self.Y.shape[1]
+        self.sim_std = sim_std
+        annual_std_alpha = sim_std
+        std_alpha = sim_std/np.sqrt(12)
+
+        orig_betas = self._coeff.sort_values(by='Alpha', axis=1, ascending=False).values[1:,:]
+
+
+        if verbose:
+            print("Annual standard deviation: {:.2f}, Standard deviation alpha: {:.2f}"\
+                  .format(annual_std_alpha, std_alpha))
+
+        # Make empty arrays
+        self.X_sim = np.empty((n_obs,n_factors,n_simulations)) # X_mats for each simulation
+        self.Y_sim = np.empty((n_obs,n_funds,n_simulations))   # n_funds fund returns for each sim
+        sim_indices = np.random.randint(0, n_obs, size=(n_obs,n_simulations))
+
+        # timing program
+
+
+        # DONE
+
+        self._has_sim = True
+
+    def percentiles(self,pct_range=np.arange(1,10)/10,top_n=5):
+        '''Returns tables of percentiles of actual data vs simulated
+        '''
+        if not self._has_sim:
+            print("Must have simulated data first.")
+            return self
+
+        # percentile parameters
+        percentages = pct_range
+        percentages1 = (10*pct_range).astype(int)
+
+        # indices for data
+        idx_b = ['Worst']
+        if top_n <= 0:
+            top_n = 5
+        for i in range(top_n-1):
+            if i==0:
+                idx_b.append('2nd')
+            elif i==1:
+                idx_b.append('3rd')
+            else:
+                idx_b.append('{:d}th'.format(i))
+        idx_t = idx_b[::-1]
+        idx_t[-1] ='Best'
+        idx_m = ['{:d}%'.format(pct*100) for pct in pct_range]
+        idx = idx_b + idx_m + idx_t
+        idx_series = pd.Series(idx)
+
+        # data to store results
+        data_cols = ['Actual','Sim Avg','%<Act']
+
+        data_a = pd.DataFrame([], index=idx, columns=data_cols) # alphas
+        data_t = pd.DataFrame([], index=idx, columns=data_cols) # t-statistics
+
+
+        # Sort original alphas and t-values in order to extract top/bottom ranked values:
+        temp_sorted_orig_a =  self._coeff.take([0], axis=0).sort_values(by=['Alpha'], axis=1, ascending = [0])
+        temp_sorted_orig_t = self._tstats.take([0], axis=0).sort_values(by=['t(Alpha)'], axis=1, ascending = [0])
+
+        # percentiles: alphas and t-stats
+        percentiles_orig_a = [temp_sorted_orig_a.T.tail(top_n).iloc[::-1],
+                              temp_sorted_orig_a.T.quantile(percentages),
+                              temp_sorted_orig_a.T.head(top_n).iloc[::-1]]
+        data_a['Actual'] = np.vstack(percentiles_orig_a)
+
+        percentiles_orig_t = [temp_sorted_orig_t.T.tail(top_n).iloc[::-1],
+                              temp_sorted_orig_t.T.quantile(percentages),
+                              temp_sorted_orig_t.T.head(top_n).iloc[::-1]]
+        data_t['Actual'] = np.vstack(percentiles_orig_t)
 
 
 # Dataset is local, not on github
@@ -421,7 +512,7 @@ plt.show()
 # value (usually '0') below. We do this to avoid overriding the std of alpha
 # in the loop running through different values of std of alpha
 
-import time
+
 
 # indices for data
 idx = ['Worst','2nd','3rd','4th','5th','10%','20%','30%','40%','50%',
@@ -488,16 +579,12 @@ for std_i,std in enumerate(t_index):
     temp_avg_orig_std_resid = np.nanmean(orig_SE_resid.values)
     temp_std_resid_ratio = np.divide(orig_SE_resid,temp_avg_orig_std_resid)
 
-    temp_alpha = std_alpha*np.tile(\
-                     np.random.randn(1,n_funds,n_simulations) * np.tile(temp_std_resid_ratio, \
-                     (1,1,n_simulations)).reshape((1,n_funds,n_simulations), order='F'),(n_obs,1,1))
-
     orig_betas = orig_coeffs_rank_a.transpose().values[1:4,:]
     constructed_resids = np.empty((n_obs,n_funds,n_simulations))*np.nan
     constructed_Y_all = np.empty((n_obs,n_funds,n_simulations))*np.nan
     for ss in range(n_simulations):
         # randomized simulations of Fama-French risk factors: Mkt-RF, SMB, HML
-        constructed_X_mat[:,:,ss] = X_mat.values[:,1:4][sim_indices[:,ss],:]
+        constructed_X_mat[:,:,ss] = X_mat.values[sim_indices[:,ss],1:]
 
         # randomized simulations of residuals from Fama-French equations
         constructed_resids[:,:,ss] = orig_resids[sim_indices[:,ss],:]
