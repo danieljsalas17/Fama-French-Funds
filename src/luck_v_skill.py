@@ -40,7 +40,7 @@ def mLag(no_obs):
     lag_select: int
         - max number of lags
     '''
-    return np.floor((4*no_obs/100)**(2/9))
+    return np.floor((4*no_obs/100)**(2/9)).astype(int)
 
 # Set up regression function with Newey-West Standard Errors (HAC)
 def OLS_HAC(dependent_var, regressors, maxLag):
@@ -82,7 +82,7 @@ class AlphaEvaluator:
     actual observations to simulated fund returns using a KAPM model.
     '''
     def __init__(self,fund_data=None,factor_data=None,
-        parse_dates=['Date','Date'],fund_names=None,factor_names=None):
+        parse_dates=[['Dates'],['Dates']],fund_names=None,factor_names=None):
         '''AlphaEvaluator is a class used to evaluate the alpha of funds.
         Calculates alpha of funds from provided datasets, runs simulations of
         fund returns, and compares actual observations to simulated fund returns
@@ -111,7 +111,7 @@ class AlphaEvaluator:
                            parse_dates=parse_dates)
 
     def load_data(self,fund_data,factor_data,fund_names=None,factor_names=None,
-        parse_dates=self.parse_dates):
+        parse_dates=[['Dates'],['Dates']]):
         '''Function for loading observed fund and factor data into the AlphaEvaluator
 
         INPUT
@@ -159,8 +159,7 @@ class AlphaEvaluator:
         return self
 
 
-    def fit(self,fund_data=self.Y_raw,factor_data=self.X_raw,fund_names=None,
-        factor_names=None,parse_dates=self.parse_dates,min_obs=120):
+    def fit(self,min_obs=120,**load_kwgs):
         '''Fit regressions to the fund and factor data. If data not passed in yet,
         pass in fund_data and factor_data here. Takes, pd.DataFrames, np.arrays
         if you also pass fund and factor names, or paths to .csv files.
@@ -169,18 +168,16 @@ class AlphaEvaluator:
         '''
         # check for updates to parameters
         self.min_obs = min_obs
-        self.parse_dates = parse_dates
         self._has_sim = False
 
         # check for data
-        if (self.Y_raw != fund_data) or (self.X_raw != factor_data):
-            self.load_data(fund_data=fund_data,factor_data=factor_data,
-                           fund_names=fund_names,factor_names=factor_names)
-        elif (self.Y_raw == None) or (self.X_raw == None):
+        if len(load_kwgs.keys()):
+            self.load_data(**load_kwgs)
+        if (self.Y_raw is None) or (self.X_raw is None):
             raise ValueError("Need Data!")
 
         # Make data regression friendly
-        self.Y = self.Y_raw.loc[:, (Y_raw.count().values > min_obs)]
+        self.Y = self.Y_raw.loc[:, (self.Y_raw.count().values > min_obs)]
         self.X = self.X_raw.copy()
         self.Y = self.Y.sub(self.X.pop('RF'),axis=0)
         self.funds = list(self.Y.columns)
@@ -194,7 +191,7 @@ class AlphaEvaluator:
 
         self._coeff = pd.DataFrame(index=coeff_names, columns = self.funds)
         self._coeffSE = pd.DataFrame(index=coeff_names, columns = self.funds)
-        self._n_i = (~np.isnan(Y_all)).sum(axis=0)
+        self._n_i = (~np.isnan(self.Y)).sum(axis=0)
 
         # Run regressions
         for fund in range(len(self.funds)):
@@ -218,18 +215,18 @@ class AlphaEvaluator:
 
         Y_pred = np.dot(self.X.values,self._coeff.values)
         self._resids = self.Y.values - Y_pred             # residuals
-        orig_SSR = np.nansum(orig_resids**2,0)           # sum squared residuals
+        orig_SSR = np.nansum(self._resids**2,0)           # sum squared residuals
         self._SE_resid = np.divide(orig_SSR**.5, (self._n_i-self.X.shape[1])) # standard errors
 
         return self
 
-    def simulate(self,n_simulations,seed=None,verbose=False,sim_std=0,
+    def simulate(self,n_simulations,random_seed=None,verbose=False,sim_std=0,
         sim_cutoff=15,**fitkwgs):
         '''Simulate fund returns. Stores the simulation results under the
         attributes with _sim suffix.
         '''
-        if seed is not None:
-            np.random(seed)
+        if random_seed is not None:
+            np.random.seed(seed=random_seed)
 
         if not self._is_fit:
             if verbose:
@@ -240,7 +237,7 @@ class AlphaEvaluator:
 
         # parameters
         n_obs = self.Y.shape[0]
-        n_factors = self.X.shape[1]
+        n_factors = self.X.shape[1]-1
         n_funds = self.Y.shape[1]
         self.sim_std = sim_std
         annual_std_alpha = sim_std
@@ -268,18 +265,19 @@ class AlphaEvaluator:
         # Fill arrays
         for ss in range(n_simulations):
             # randomized simulations of Fama-French risk factors: Mkt-RF, SMB, HML
-            self.X_sim[:,:,ss] = X_mat.values[sim_indices[:,ss],1:]
+            self.X_sim[:,:,ss] = self.X.values[sim_indices[:,ss],1:]
 
             # randomized simulations of residuals from Fama-French equations
             self._resids_sim[:,:,ss] = self._resids[sim_indices[:,ss],:]
 
             #simulated returns based on fund betas, randomized resids and alphas (0?)
-            self.Y_sim[:,:,ss] = temp_alpha[:,:,ss] + np.matmul(self.X_sim[:,:,ss], orig_betas) \
+
+            self.Y_sim[:,:,ss] = temp_alpha[:,:,ss] + self.X_sim[:,:,ss].dot(orig_betas) \
                                 +self._resids_sim[:,:,ss]
         # regressions
 
         if verbose:
-            print("Starting {:d,} regressions...".format(n_simulations*n_funds))
+            print("Starting {:,} regressions...".format(n_simulations*n_funds))
 
         # Populate target output vectors to be filled in with loop:
         self._coeffSE_sim = np.empty((n_factors+1,n_funds,n_simulations))
@@ -343,10 +341,10 @@ class AlphaEvaluator:
             elif i==1:
                 idx_b.append('3rd')
             else:
-                idx_b.append('{:d}th'.format(i))
+                idx_b.append('{}th'.format(i))
         idx_t = idx_b[::-1]
         idx_t[-1] ='Best'
-        idx_m = ['{:d}%'.format(pct*100) for pct in pct_range]
+        idx_m = ['{}%'.format(int(pct*100)) for pct in pct_range]
         idx = idx_b + idx_m + idx_t
         idx_series = pd.Series(idx)
 
@@ -363,12 +361,13 @@ class AlphaEvaluator:
 
         # percentiles: alphas and t-stats
         percentiles_orig_a = [temp_sorted_orig_a.T.tail(top_n).iloc[::-1],
-                              temp_sorted_orig_a.T.quantile(percentages),
+                              np.quantile(a=temp_sorted_orig_a,q=percentages).reshape(-1,1),
                               temp_sorted_orig_a.T.head(top_n).iloc[::-1]]
+
         data_a['Actual'] = np.vstack(percentiles_orig_a)
 
         percentiles_orig_t = [temp_sorted_orig_t.T.tail(top_n).iloc[::-1],
-                              temp_sorted_orig_t.T.quantile(percentages),
+                              np.quantile(a=temp_sorted_orig_t,q=percentages).reshape(-1,1),
                               temp_sorted_orig_t.T.head(top_n).iloc[::-1]]
         data_t['Actual'] = np.vstack(percentiles_orig_t)
 
