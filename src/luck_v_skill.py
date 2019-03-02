@@ -20,19 +20,43 @@ sns.set()
 # Create function to calculate the lag selection parameter for the standard HAC Newey-West
 # (1994) plug-in procedure
 def mLag(no_obs):
-    result = math.floor(math.pow(4*no_obs/100,(2/9)))
-    return result
+    '''Calculates the lag selection parameter for the standard HAC Newey-West
+    (1994) plug-in procedure.
+
+    INPUT
+    -----
+    no_obs: int
+        - number of observations in the endogenous variable for a regression
+    OUTPUT
+    ------
+    lag_select: int
+        - max number of lags
+    '''
+    return np.floor((4*no_obs/100)**(2/9))
 
 # Set up regression function with Newey-West Standard Errors (HAC)
-def ols(dependent_var, regressors, no_obs):
+def OLS_HAC(dependent_var, regressors, maxLag):
+    '''Runs OLS regression with a the standard HAC New-West (1994) plug-in
+    procedure.
+
+    INPUT
+    -----
+    dependent_var: ndarray, (no_obs,)
+        - dependent variable in regression
+    regressors: ndarray, (no_obs,k)
+        - k regressors (including constant)
+    no_obs: int
+        - number of observations used to calculate HAC Newey-West plug-in procedure
+
+    OUTPUT
+    ------
+    result: statsmodels.OLS (object)
+        - A fitted statsmodels OLS regression model
+    '''
     result = sm.OLS(endog=dependent_var, exog=regressors, missing='drop').\
-                fit(cov_type='HAC',cov_kwds={'maxlags':mLag(no_obs)+1})
+                fit(cov_type='HAC',cov_kwds={'maxlags':maxLag})
     return result
 
-# Set up regression function with Newey-West Standard Errors (HAC)
-def ols_s(left_side, right_side, maxLag_temp):
-    result = sm.OLS(left_side, right_side, missing='drop').fit(cov_type='HAC',cov_kwds={'maxlags':maxLag_temp})
-    return result
 
 def ecdf(sample):
     sample = np.atleast_1d(sample)
@@ -40,7 +64,154 @@ def ecdf(sample):
     cumprob = np.cumsum(counts).astype(np.double) / sample.size
     return quantiles, cumprob
 
-#
+#-------------------------------------------------------------------------------
+# Useful Classes
+#-------------------------------------------------------------------------------
+class AlphaEvaluator:
+    '''
+    A class used to evaluate the alpha of funds. Calculates alpha of funds
+    from provided datasets, runs simulations of fund returns, and compares
+    actual observations to simulated fund returns using a KAPM model.
+    '''
+    def __init__(self,fund_data=None,factor_data=None,
+                 parse_dates=['Date','Date'],fund_names=None,factor_names=None):
+        '''AlphaEvaluator is a class used to evaluate the alpha of funds.
+        Calculates alpha of funds from provided datasets, runs simulations of
+        fund returns, and compares actual observations to simulated fund returns
+        using a KAPM model.
+
+        INPUT
+        -----
+        fund_data, factor_data: None, str, np.array, pd.DataFrame
+            - must be same type. If None, load data later with fit() method or
+            load_data() method.
+        fund_names, factor_names: list, iterable
+            - contains names of funds and factors as strings
+        parse_dates: [fund_data.date,factor_data.date]
+            - colname as string for each dataset that corresponds to datetime
+        '''
+        self._is_fit = False
+        self.parse_dates = parse_dates
+
+        if (fund_data is None) and (factor_data is None):
+            self.X_raw = None
+            self.Y_raw = None
+        else:
+            self.load_data(fund_data=fund_data,factor_data=factor_data,
+                           fund_names=fund_names,factor_names=factor_names,
+                           parse_dates=parse_dates)
+
+    def load_data(self,fund_data,factor_data,fund_names=None,factor_names=None,
+                  parse_dates=self.parse_dates):
+        '''Function for loading observed fund and factor data into the AlphaEvaluator
+
+        INPUT
+        -----
+        fund_data: str, numpy.array, or pandas.DataFrame
+            - str is a path to a csv file
+        factor_data: str, numpy.array, or pandas.DataFrame
+            - str is a path to a csv file
+        fund_names, factor_names: None or list
+            - only needed if np.array data is passed in
+        '''
+
+        # check for updates to parameters
+        self.parse_dates = parse_dates
+        self._is_fit = False
+
+        # check for data
+        if (fund_data is None) or (factor_data is None):
+            raise ValueError("Funds data and factor data must be submitted!")
+
+        elif type(fund_data) is str:
+            self.Y_raw = pd.read_csv(fund_data,parse_dates=parse_dates[0])
+            self.X_raw = pd.read_csv(factor_data,parse_dates=parse_dates[1])
+
+        elif type(fund_data) is pd.DataFrame:
+            if fund_data.shape[0] != factor_data.shape[0]:
+                raise ValueError("Both datasets should have same number of observations")
+            self.Y_raw = fund_data
+            self.X_raw = factor_data
+
+        elif type(fund_data) is type(np.array([])):
+            if (fund_names is None) or (factor_names is None):
+                raise ValueError("Must input fund names and factor names")
+            elif fund_data.shape[0] != factor_data.shape[0]:
+                raise ValueError("Both datasets should have same number of observations")
+            else:
+                self.Y_raw = pd.DataFrame(data=fund_data,columns=fund_names)
+                self.X_raw = pd.DataFrame(data=factor_data,columns=factor_names)
+        else:
+            raise ValueError("Not sure what happened, but you did something wrong...")
+
+        return self
+
+
+    def fit(self,fund_data=self.Y_raw,factor_data=self.X_raw,fund_names=None,
+            factor_names=None,parse_dates=self.parse_dates,min_obs=120):
+        '''Fit regressions to the fund and factor data. If data not passed in yet,
+        pass in fund_data and factor_data here. Takes, pd.DataFrames, np.arrays
+        if you also pass fund and factor names, or paths to .csv files.
+
+        OUTPUT: self
+        '''
+        # check for updates to parameters
+        self.min_obs = min_obs
+        self.parse_dates = parse_dates
+
+        # check for data
+        if (self.Y_raw != fund_data) or (self.X_raw != factor_data):
+            self.load_data(fund_data=fund_data,factor_data=factor_data,
+                           fund_names=fund_names,factor_names=factor_names)
+        elif (self.Y_raw == None) or (self.X_raw == None):
+            raise ValueError("Need Data!")
+
+        # Make data regression friendly
+        self.Y = self.Y_raw.loc[:, (Y_raw.count().values > min_obs)]
+        self.X = self.X_raw.copy()
+        self.Y = self.Y.sub(self.X.pop('RF'),axis=0)
+        self.funds = list(self.Y.columns)
+        self.factors = list(self.X.columns)
+        self.X.insert(0, 'const', float(1)) # insert column of ones for the constant in regression
+
+        # Make space for regression results
+        coeff_names = ['Alpha']
+        for factor in self.factors:
+            coeff_names.append(factor)
+
+        self._coeff = pd.DataFrame(index=coeff_names, columns = self.funds)
+        self._coeffSE = pd.DataFrame(index=coeff_names, columns = self.funds)
+        self._n_i = (~np.isnan(Y_all)).sum(axis=0)
+
+        # Run regressions
+        for fund in range(len(self.funds)):
+            lm = OLS_HAC(dependent_var = self.Y.iloc[:,fund],
+                         regressors = self.X,
+                         maxLag = mLag(self._n_i[fund])) # run OLS
+
+            for factor in range(len(coeff_names)):
+                self._coeff.iloc[factor, fund] = lm.params.iloc[factor]
+                self._coeffSE.iloc[factor, fund] = lm.bse.iloc[factor]
+
+        # rename all coefficients with t(.)
+        rename_dict = {}
+        for coeff in coeff_names:
+            rename_dict[coeff] = 't({})'.format(coeff)
+
+        self._tstats = self._coeff/self._coeffSE
+        self._tstats.rename(rename_dict,axis='index',inplace=True)
+
+        self._is_fit = True
+
+        return self
+
+    def simulate(self,verbose=False):
+        '''Simulate fund returns.
+        '''
+        pass
+
+
+
 # Dataset is local, not on github
 Y_raw = pd.read_csv('../data/global_funds.csv',parse_dates=['Dates'],index_col=['Dates'])
 X_raw = pd.read_csv('../data/global_factors.csv',parse_dates=['Dates'],index_col=['Dates'])
@@ -77,7 +248,7 @@ sim_factors=['Mkt-RF', 'SMB', 'HML']
 one_name=['Alpha']
 
 # Empty coefficient and standard error matrices (fill with results later)
-orig_coeffs = pd.DataFrame(np.zeros(shape = (n_factors+1, n_funds)), index=factor_names, columns = funds)/0
+orig_coeffs = pd.DataFrame(index=factor_names, columns = funds)
 orig_SE_coeffs = pd.DataFrame(np.zeros(shape = (n_factors+1, n_funds)), index=factor_names, columns = funds)/0
 
 # Calculate number of observations per fund per simulation for future
@@ -87,7 +258,7 @@ n_i = (~np.isnan(Y_all)).sum(axis=0) # number of observations of each fund in da
 # Test ols function
 test_fund = 0
 y_sample = Y_all.iloc[:,test_fund]         # y_sample is just one column of Y_all
-lm = ols(y_sample, X_mat, n_i.iloc[test_fund])
+lm = OLS_HAC(y_sample, X_mat, maxLag(n_i.iloc[test_fund])+1)
 
 # Check Sample Regression Results
 for name,result in zip(['coefficients','standard errors','# observations'],
@@ -99,7 +270,8 @@ for name,result in zip(['coefficients','standard errors','# observations'],
 #Perform initial regressions on fund returns
 for fund in range(n_funds):
     y_sample = Y_all.iloc[:,fund] # choose fund
-    lm = ols(y_sample,X_mat, n_i[fund]) # run OLS
+    lm = OLS_HAC(dependent_var = y_sample,regressors = X_mat,
+                 maxLag = mLag(n_i[fund])) # run OLS
 
     for factor in range(n_factors+1):
         orig_coeffs.iloc[factor, fund] = lm.params.iloc[factor]
@@ -361,7 +533,7 @@ for std_i,std in enumerate(t_index):
                 maxLag_temp = maxLag_s[jj,ss]
 
                 # linear regression
-                lma = ols_s(ya_sample, xa, maxLag_temp)
+                lma = OLS_HAC(ya_sample, xa, maxLag_temp)
                 sim_SE_resid[:,jj,ss] = lma.bse
                 sim_coeffs[:,jj,ss] = lma.params
 
