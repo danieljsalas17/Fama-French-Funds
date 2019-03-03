@@ -335,9 +335,9 @@ class AlphaEvaluator:
                   .format(annual_std_alpha, std_alpha))
 
         # Make empty arrays
-        self.X_sim = np.empty((n_obs,n_factors,n_simulations)) # X_mats for each simulation
-        self.Y_sim = np.empty((n_obs,n_funds,n_simulations))   # n_funds fund returns for each sim
-        self._resids_sim = np.empty((n_obs,n_funds,n_simulations))
+        self.X_sim = np.empty((n_obs,n_factors,n_simulations))*np.nan # X_mats for each simulation
+        self.Y_sim = np.empty((n_obs,n_funds,n_simulations))*np.nan   # n_funds fund returns for each sim
+        self._resids_sim = np.empty((n_obs,n_funds,n_simulations))*np.nan
         sim_indices = np.random.randint(0, n_obs, size=(n_obs,n_simulations))
 
         temp_avg_orig_std_resid = np.nanmean(self._SE_resid.values)
@@ -364,8 +364,8 @@ class AlphaEvaluator:
             print("Starting {:,} regressions...".format(n_simulations*n_funds))
 
         # Populate target output vectors to be filled in with loop:
-        self._coeffSE_sim = np.empty((n_factors+1,n_funds,n_simulations))
-        self._coeff_sim = np.empty((n_factors+1,n_funds,n_simulations))
+        self._coeffSE_sim = np.empty((n_factors+1,n_funds,n_simulations))*np.nan
+        self._coeff_sim = np.empty((n_factors+1,n_funds,n_simulations))*np.nan
 
         # Calculate number of observations per fund per simulation for future
         # reference:
