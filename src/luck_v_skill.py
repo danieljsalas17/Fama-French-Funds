@@ -415,7 +415,7 @@ class AlphaEvaluator:
 
         # percentile parameters
         percentages = pct_range
-        percentages1 = (10*pct_range).astype(int)
+        percentages100 = (100*pct_range).astype(int)
 
         # indices for data
         idx_b = ['Worst']
@@ -446,12 +446,12 @@ class AlphaEvaluator:
 
         # percentiles: alphas and t-stats
         percentiles_orig_a = [temp_sorted_orig_a.T.tail(top_n).iloc[::-1],
-                              np.quantile(a=temp_sorted_orig_a,q=percentages).reshape(-1,1),
+                              np.nanquantile(a=temp_sorted_orig_a,q=percentages).reshape(-1,1),
                               temp_sorted_orig_a.T.head(top_n).iloc[::-1]]
         data_a['Actual'] = np.vstack(percentiles_orig_a)
 
         percentiles_orig_t = [temp_sorted_orig_t.T.tail(top_n).iloc[::-1],
-                              np.quantile(a=temp_sorted_orig_t,q=percentages).reshape(-1,1),
+                              np.nanquantile(a=temp_sorted_orig_t,q=percentages).reshape(-1,1),
                               temp_sorted_orig_t.T.head(top_n).iloc[::-1]]
         data_t['Actual'] = np.vstack(percentiles_orig_t)
 
@@ -463,22 +463,39 @@ class AlphaEvaluator:
 
             # add insights from simulations
             # sorted simulations by alphas and t-stats
-            temp_sort_asc_sim_a = np.sort(self._coeff_sim[0,:,:].T, axis=1)
-            temp_sort_asc_sim_t = np.sort(self._tstats_sim[0,:,:].T, axis=1)
-            temp_percentiles_sim_a = np.concatenate((temp_sort_asc_sim_a.T[0:5,:], \
-                                     np.percentile(self._coeff_sim[0,:,:].T, percentages1, axis = 1), \
-                                     temp_sort_asc_sim_a.T[-5:,:]))
-            temp_percentiles_sim_t = np.concatenate((temp_sort_asc_sim_t.T[0:5,:], \
-                                     np.percentile(self._tstats_sim[0,:,:].T, percentages1, axis = 1), \
-                                     temp_sort_asc_sim_t.T[-5:,:]))
-            mean_percentiles_sim_a = np.nanmean(temp_percentiles_sim_a, axis=1)
-            mean_percentiles_sim_t = np.nanmean(temp_percentiles_sim_t, axis=1)
-            sim_smaller_a = np.sum(temp_percentiles_sim_a < \
-                                   np.tile(np.vstack(percentiles_orig_a),
-                                           (1,n_simulations)), axis=1)/n_simulations*100
-            sim_smaller_t = np.sum(temp_percentiles_sim_t < \
-                                   np.tile(np.vstack(percentiles_orig_t),
-                                           (1,n_simulations)), axis=1)/n_simulations*100
+
+            sort_asc_sim_a = np.sort(self._coeff_sim[0,:,:], axis=0)
+            sort_asc_sim_t = np.sort(self._tstats_sim[0,:,:], axis=0)
+            sim_a_bot_n = sort_asc_sim_a[0:top_n,:]
+            sim_t_bot_n = sort_asc_sim_t[0:top_n,:]
+
+            # top_n descending is tricky for some reason
+            sort_asc_sim_a[np.isnan(sort_asc_sim_a)] = -9999999
+            sim_a_top_n = np.sort(sort_asc_sim_a,axis=0)[-top_n:,:]
+            sort_asc_sim_t[np.isnan(sort_asc_sim_t)] = -9999999
+            sim_t_top_n = np.sort(sort_asc_sim_t,axis=0)[-top_n:,:]
+
+            # percentiles
+            percentiles_sim_a = np.concatenate((sim_a_bot_n, \
+                                    np.nanpercentile(self._coeff_sim[0,:,:].T,
+                                                    percentages100, axis = 1), \
+                                    sim_a_top_n))
+
+            percentiles_sim_t = np.concatenate((sim_t_bot_n, \
+                                    np.nanpercentile(self._tstats_sim[0,:,:].T,
+                                                     percentages100, axis = 1), \
+                                    sim_t_top_n))
+
+            mean_percentiles_sim_a = np.nanmean(percentiles_sim_a, axis=1)
+            mean_percentiles_sim_t = np.nanmean(percentiles_sim_t, axis=1)
+            sim_smaller_a = np.nansum(percentiles_sim_a < \
+                                      np.tile(np.vstack(percentiles_orig_a),
+                                             (1,n_simulations)),
+                                      axis=1)/n_simulations*100
+            sim_smaller_t = np.nansum(percentiles_sim_t < \
+                                      np.tile(np.vstack(percentiles_orig_t),
+                                             (1,n_simulations)),
+                                      axis=1)/n_simulations*100
             if verbose:
                 print("Populating data tables... ",end="")
 
