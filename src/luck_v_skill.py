@@ -42,28 +42,90 @@ def mLag(no_obs):
     '''
     return np.floor((4*no_obs/100)**(2/9)).astype(int)
 
+# Heteroskedasticity and Autocorrelation Newey-West standard errors
+def HAC_BSE(y,x,b,maxLag=mLag):
+    '''Calculates Heteroskedasticity and Autocorrelation (HAC) Newey-West
+    standard errors. Default lag procedure is below:
+
+        maxLags = np.floor((4*no_obs/100)**(2/9)).astype(int)
+
+    If you want a different lag procedure, pass in a new
+    function under mLag=func, and make sure that the function
+    only takes 'n_obs', an int for number of observations,
+    as an input.
+
+    INPUT
+    -----
+    y: n x 1 ndarray
+        - dependent variable array
+    x: n x k ndarray
+        - independent variables array (include constant in x)
+    b: k x 1 ndarray
+        - OLS regression coefficients
+
+    OUTPUT
+    ------
+    hac_bse: k x 1 ndarray
+        - HAC coefficient standard errors
+
+
+    For more info on HAC Newey-West check out this link:
+
+    https://www.stata.com/manuals13/tsnewey.pdf
+    '''
+    n,k = x.shape
+    m = maxLag(n)
+    r = y - x.dot(b)
+    XXI = np.linalg.inv(x.T.dot(x))
+    w = np.diag(r**2)
+    XWX = x.T.dot(w).dot(x)
+    for l in range(1,m+1):
+        w = np.diag(r[l:]*r[:-l])
+        XWX += x[:-l,:].T.dot(w).dot(x[l:,:])
+        XWX += x[l:,:].T.dot(w).dot(x[:-l,:])
+        XWX *= (1-l/(m+1))
+    XWX *= n/(n-k)
+    var_B = XXI.dot(XWX).dot(XXI)
+    return np.sqrt(abs(np.diag(var_B)))
+
+
 # Set up regression function with Newey-West Standard Errors (HAC)
-def OLS_HAC(dependent_var, regressors, maxLag):
-    '''Runs OLS regression with a the standard HAC New-West (1994) plug-in
+def OLS_HAC(Y, X, add_const=True,maxLag=mLag):
+    '''Runs OLS regression with a the standard HAC Newey-West (1994) plug-in
     procedure.
 
     INPUT
     -----
-    dependent_var: ndarray, (no_obs,)
+    y: ndarray, (n,)
         - dependent variable in regression
-    regressors: ndarray, (no_obs,k)
+    x: ndarray, (no_obs,k)
         - k regressors (including constant)
-    no_obs: int
-        - number of observations used to calculate HAC Newey-West plug-in procedure
+    add_const: bool, Default = True
+        - If True, this function adds constant to regressors. If False,
+        this function doesn't add the constant.
+    maxLag: func, Default = lambda x: numpy.floor((4*x/100)**(2/9)).astype(int)
+        - Lag selection function for HAC-NW SE's
 
-    OUTPUT
+    OUTPUT: (beta,hac_bse)
     ------
-    result: statsmodels.OLS (object)
-        - A fitted statsmodels OLS regression model
+    beta: ndarray, (k,1)
+        - OLS coefficients
+    hac_bse: ndarray, (k,1)
+        - HAC-NW standard errors
     '''
-    result = sm.OLS(endog=dependent_var, exog=regressors, missing='drop').\
-                fit(cov_type='HAC',cov_kwds={'maxlags':maxLag})
-    return result
+    # drop missing values
+    exist = ~np.isnan(Y)
+    y,x = Y[exist],X[exist,:]
+
+    # add constant if necessary
+    if add_const:
+        x = sm.add_constant(x)
+
+    # Get Results
+    beta = np.linalg.inv(x.T.dot(x)).dot(x.T.dot(y)) # OLS coefficients
+    hac_bse = HAC_BSE(y=y,x=x,b=beta,maxLag=maxLag) # HAC standard errors
+    t_stats = beta/hac_bse
+    return beta, hac_bse#, t_stats
 
 
 def ecdf(sample):
@@ -102,6 +164,7 @@ class AlphaEvaluator:
         self._has_sim = False
         self._has_percentiles = None
         self.parse_dates = parse_dates
+        self.maxLag = mLag
 
         if (fund_data is None) and (factor_data is None):
             self.X_raw = None
@@ -126,7 +189,6 @@ class AlphaEvaluator:
 
         One of the factor names must be 'RF'
         '''
-
         # check for updates to parameters
         self.parse_dates = parse_dates
         self._is_fit = False
@@ -135,7 +197,7 @@ class AlphaEvaluator:
 
         # check for data
         if (fund_data is None) or (factor_data is None):
-            raise ValueError("Funds data and factor data must be submitted!")
+            raise ValueError("Funds data AND factor data must be submitted!")
 
         elif type(fund_data) is str:
             self.Y_raw = pd.read_csv(fund_data,parse_dates=parse_dates[0])
@@ -160,8 +222,7 @@ class AlphaEvaluator:
 
         return self
 
-
-    def fit(self,min_obs=120,**load_kwgs):
+    def fit(self,min_obs=120,*args,**kwargs):
         '''Fit regressions to the fund and factor data. If data not passed in yet,
         pass in fund_data and factor_data here. Takes, pd.DataFrames, np.arrays
         if you also pass fund and factor names, or paths to .csv files.
@@ -175,9 +236,12 @@ class AlphaEvaluator:
         self._has_sim = False
         self._has_percentiles = None
 
-        # check for data
-        if len(load_kwgs.keys()):
-            self.load_data(**load_kwgs)
+        # check for modifications
+        if "load_kwgs" in kwargs.keys():
+            self.load_data(**kwargs["load_kwgs"])
+        if "olskwgs" in kwargs.keys():
+            if 'maxLag' in kwargs["olskwgs"].keys():
+                self.maxLag = kwargs["olskwgs"]['maxLag']
         if (self.Y_raw is None) or (self.X_raw is None):
             raise ValueError("Need Data!")
 
@@ -194,44 +258,53 @@ class AlphaEvaluator:
         for factor in self.factors:
             coeff_names.append(factor)
 
+        # Create empty coefficient, standard error
         self._coeff = pd.DataFrame(index=coeff_names, columns = self.funds)
         self._coeffSE = pd.DataFrame(index=coeff_names, columns = self.funds)
+
+        # make array of non-null sample counts for each fund
         self._n_i = (~np.isnan(self.Y)).sum(axis=0)
 
-        # Run regressions
+        # Run regressions for each fund
         for fund in range(len(self.funds)):
-            lm = OLS_HAC(dependent_var = self.Y.iloc[:,fund],
-                         regressors = self.X,
-                         maxLag = mLag(self._n_i[fund])) # run OLS
+            beta,hac_bse = OLS_HAC(Y = self.Y.iloc[:,fund].values,
+                                   X = self.X.values, add_const=False,
+                                   maxLag = self.maxLag) # run OLS
+            # store outcomes
+            self._coeff.iloc[:,fund] = beta
+            self._coeffSE.iloc[:,fund] = hac_bse
+            # self._tstats.iloc[:,fund] = t_stats
 
-            for factor in range(len(coeff_names)):
-                self._coeff.iloc[factor, fund] = lm.params.iloc[factor]
-                self._coeffSE.iloc[factor, fund] = lm.bse.iloc[factor]
+        # Record that regressions are done
+        self._is_fit = True
 
-        # rename all coefficients with t(.)
+        # Calculate t-statistics
+        self._tstats = self._coeff/self._coeffSE
+
+        # rename indices in _tstats dataframe with 't(index)'
         rename_dict = {}
         for coeff in coeff_names:
             rename_dict[coeff] = 't({})'.format(coeff)
-
-        self._tstats = self._coeff/self._coeffSE
         self._tstats.rename(rename_dict,axis='index',inplace=True)
 
-        self._is_fit = True
-
+        # store residuals and regression standard error
         Y_pred = np.dot(self.X.values,self._coeff.values)
         self._resids = self.Y.values - Y_pred             # residuals
         orig_SSR = np.nansum(self._resids**2,0)           # sum squared residuals
-        self._SE_resid = np.divide(orig_SSR**.5, (self._n_i-self.X.shape[1])) # standard errors
+        self._SE_resid = np.divide(np.sqrt(orig_SSR), (self._n_i-self.X.shape[1])) # standard errors
 
         return self
 
     def simulate(self,n_simulations,random_seed=None,verbose=False,sim_std=0,
-        sim_cutoff=15,**fitkwgs):
+        sim_cutoff=15,*args,**kwargs):
         '''Simulate fund returns. Stores the simulation results under the
         attributes with _sim suffix.
 
         UPDATE DOC STRING
         '''
+        start_time = time.time() # start timer
+
+        # Check input parameters for any modifications to behavior
         self._has_percentiles = None
         if random_seed is not None:
             np.random.seed(seed=random_seed)
@@ -239,10 +312,14 @@ class AlphaEvaluator:
         if not self._is_fit:
             if verbose:
                 print("Need to fit data first!")
-            self.fit(**fitkwgs)
+            if "fitkwgs" in kwargs.keys():
+                self.fit(**kwargs['fitkwgs'])
+            else:
+                self.fit()
 
-        start_time = time.time()
-
+        if 'olskwgs' in kwargs.keys():
+            if 'maxLag' in kwargs['olskwgs'].keys():
+                self.maxLag = kwargs['olskwgs']['maxLag']
         # parameters
         n_obs = self.Y.shape[0]
         n_factors = self.X.shape[1]-1
@@ -270,7 +347,7 @@ class AlphaEvaluator:
                      np.random.randn(1,n_funds,n_simulations) * np.tile(temp_std_resid_ratio, \
                      (1,1,n_simulations)).reshape((1,n_funds,n_simulations), order='F'),(n_obs,1,1))
 
-        # Fill arrays
+        # Fill simulated X,Y and residuals arrays
         for ss in range(n_simulations):
             # randomized simulations of Fama-French risk factors: Mkt-RF, SMB, HML
             self.X_sim[:,:,ss] = self.X.values[sim_indices[:,ss],1:]
@@ -283,7 +360,6 @@ class AlphaEvaluator:
             self.Y_sim[:,:,ss] = temp_alpha[:,:,ss] + self.X_sim[:,:,ss].dot(orig_betas) \
                                 +self._resids_sim[:,:,ss]
         # regressions
-
         if verbose:
             print("Starting {:,} regressions...".format(n_simulations*n_funds))
 
@@ -297,21 +373,19 @@ class AlphaEvaluator:
 
         # Calculate the lag selection parameter for the standard Newey-West HAC
         # estimate (Andrews and Monohan, 1992), one number per fund per simulation:
-        maxLag_s = mLag(n_i_s).astype(int)
 
         # Loop through each simulation run:
         for ss in range(n_simulations):
             #Loop through each fund:
             for jj in range(n_funds):
                 if n_i_s[jj,ss]>= sim_cutoff:
-                    xa = sm.add_constant(self.X_sim[:,:,ss])
-                    ya_sample = self.Y_sim[:,jj,ss]
-                    maxLag_temp = maxLag_s[jj,ss]
+                    x_sim = self.X_sim[:,:,ss]
+                    y_sim = self.Y_sim[:,jj,ss]
 
                     # linear regression
-                    lma = OLS_HAC(ya_sample, xa, maxLag_temp)
-                    self._coeffSE_sim[:,jj,ss] = lma.bse
-                    self._coeff_sim[:,jj,ss] = lma.params
+                    beta,hac_bse = OLS_HAC(y_sim,x_sim,maxLag=self.maxLag)
+                    self._coeffSE_sim[:,jj,ss] = hac_bse
+                    self._coeff_sim[:,jj,ss] = beta
 
         self._tstats_sim = np.divide(self._coeff_sim,self._coeffSE_sim)
 
@@ -324,7 +398,7 @@ class AlphaEvaluator:
         return self
 
     def get_percentiles(self,pct_range=np.arange(1,10)/10,top_n=5,
-                        verbose=False,sim_percentiles=True,**simkwgs):
+                        verbose=False,sim_percentiles=True,*args,**kwargs):
         '''Adds/updates tables of percentiles of actual data vs simulated to the
         AlphaEvaluator can be found under attributes: data_a and data_t
 
@@ -334,7 +408,10 @@ class AlphaEvaluator:
             if verbose:
                 print("Must have simulated data first. Simulating now...")
                 print("This could take some time...")
-            self.simulate(**simkwgs)
+            if 'simkwgs' in kwargs.keys():
+                self.simulate(**kwargs['simkwgs'])
+            else:
+                self.simulate(n_simulations=1000)
 
         # percentile parameters
         percentages = pct_range
@@ -359,7 +436,6 @@ class AlphaEvaluator:
 
         # data to store results
         data_cols = ['Actual']
-
         data_a = pd.DataFrame([], index=idx, columns=data_cols) # alphas
         data_t = pd.DataFrame([], index=idx, columns=data_cols) # t-statistics
 
@@ -372,7 +448,6 @@ class AlphaEvaluator:
         percentiles_orig_a = [temp_sorted_orig_a.T.tail(top_n).iloc[::-1],
                               np.quantile(a=temp_sorted_orig_a,q=percentages).reshape(-1,1),
                               temp_sorted_orig_a.T.head(top_n).iloc[::-1]]
-
         data_a['Actual'] = np.vstack(percentiles_orig_a)
 
         percentiles_orig_t = [temp_sorted_orig_t.T.tail(top_n).iloc[::-1],
@@ -381,6 +456,8 @@ class AlphaEvaluator:
         data_t['Actual'] = np.vstack(percentiles_orig_t)
 
         if sim_percentiles:
+            if verbose:
+                print("Calculating percentiles of simulations... ",end="")
             # parameters
             n_simulations = self.n_simulations
 
@@ -403,7 +480,7 @@ class AlphaEvaluator:
                                    np.tile(np.vstack(percentiles_orig_t),
                                            (1,n_simulations)), axis=1)/n_simulations*100
             if verbose:
-                print("Populating data tables...")
+                print("Populating data tables... ",end="")
 
             # Collecting alpha data
             data_a['Sim Avg'] = mean_percentiles_sim_a
@@ -420,7 +497,8 @@ class AlphaEvaluator:
         self.data_a = data_a
         self.data_t = data_t
 
-
+        if verbose:
+            print("Done!")
         return self
 
 # #-------------------------------------------------------------------------------
@@ -452,7 +530,7 @@ class AlphaEvaluator:
 #                 fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
 #
 #             for i,stat,ax in zip(range(len(axes),statistic,axes):
-#                 axes[i] = self.plot_cdf(stat,axes=ax,*args,**kwargs)
+#                 _, axes[i] = self.plot_cdf(stat,axes=ax,*args,**kwargs)
 #
 #         elif type(statistic) is str:
 #             if axes is None:
@@ -466,7 +544,7 @@ class AlphaEvaluator:
 #             else:
 #                 raise ValueError("Statistic must be 'alpha' and/or 'tstat'")
 #         if fig is None:
-#             return axes
+#             return None, axes
 #         else:
 #             return fig, axes
 #         prct = np.arange(1,100,1)
@@ -484,6 +562,23 @@ class AlphaEvaluator:
 #
 #
 #         return figs, axes
+#
+#         def plot_kde(self,statistic,fig=None,axes=None,*args,**kwargs):
+#             '''UPDATE DOC STRING
+#             '''
+#             return fig, axes
+#
+#         def plot_hist(self,statistic,fund=-1,fig=None,axes=None,*args,kwargs):
+#             '''UPDATE DOC STRING
+#             '''
+#             if type(statistic) is type([]):
+#                 for stat in statistic:
+#                     self.plot_hist(statistic=stat,fund=fund,fig=fig,
+#                                    axes=axes,*args,**kwargs)
+#             if type(fund) is type([]):
+#                 for f in fund:
+#
+#             return fig, axes
 # # Generate CDF plot for alphas:
 #
 # # compute the ECDF of the samples
@@ -573,7 +668,7 @@ class AlphaEvaluator:
 # # WORST
 # temp_input = 0
 # temp_t = np.vstack(percentiles_orig_t)[temp_input]
-# 
+#
 # plt.figure(figsize=(9,6))
 # result = plt.hist(temp_percentiles_sim_t[temp_input,:][~np.isnan(temp_percentiles_sim_t[temp_input,:])],
 #                   bins=25, color='c', edgecolor='k', alpha=0.65)
