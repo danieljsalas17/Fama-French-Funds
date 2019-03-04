@@ -518,84 +518,169 @@ class AlphaEvaluator:
             print("Done!")
         return self
 
-# #-------------------------------------------------------------------------------
-# # PLOTTING TOOLS
-# #-------------------------------------------------------------------------------
-# # Generate CDF plot for alphas:
-#     def plot(self,type,statistic,fund=-1,*args,**kwargs):
-#         '''UPDATE DOC STRING'''
-#         prct = np.arange(1,100,1)
+#-------------------------------------------------------------------------------
+# PLOTTING TOOLS
+#-------------------------------------------------------------------------------
+# Generate CDF plot for alphas:
+    def plot(self,plot_type,statistic,fund=-1,*args,**kwargs):
+        '''UPDATE DOC STRING'''
+        if not self._has_sim:
+            raise ValueError("No simulation data available!")
+
+        nrows, ncols, n_funds = 1,1,1
+
+        if ('hist' in plot_type) and (type(fund) is not int):
+            n_funds = len(fund)
+
+        plot_list = type(plot_type) is list
+        stat_list = type(statistic) is list
+        if not plot_list:
+            plot_type = [plot_type]
+
+        if plot_list:
+            nrows = len(plot_type)
+        if stat_list:
+            ncols = len(statistic)
+
+        # create plot objects
+        fig, axes = plt.subplots(nrows=nrows*n_funds,ncols=ncols)
+        prct = np.arange(1,100,1)
+
+        # Make plots
+        for row,ptype in enumerate(plot_type):
+            if ptype == 'cdf':
+                _, axes[row] = self.plot_cdf(statistic,axes=axes[row],*args,**kwargs)
+            elif ptype == 'kde':
+                _, axes[row] = self.plot_kde(statistic,axes=axes[row],*args,**kwargs)
+            elif ptype == 'hist':
+                _, axes[row:row+n_funds] = self.plot_hist(statistic,
+                                                axes=axes[row:row+n_funds],
+                                                fund=fund)
+            else:
+                raise ValueError("Invalid plot type. Only 'cdf','kde','hist'.")
+        return figs, axes
+
+    # PLOTS CDF (can be called independent of plot function)
+    def plot_cdf(self,statistic,fig=None,axes=None,*args,**kwargs):
+        '''UPDATE DOC STRING'''
+        if not self._has_sim:
+            raise ValueError("No simulation data available!")
+
+        if type(statistic) is list:
+            if axes is None:
+                fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
+
+            for i,stat,ax in zip(range(len(axes),statistic,axes):
+                _, axes[i] = self.plot_cdf(stat,axes=ax,*args,**kwargs)
+
+        elif type(statistic) is str:
+            prct = np.arange(1,100,1)
+            if axes is None:
+                fig, axes = plt.subplots(nrows=1,ncols=1,figsize=figsize)
+            if statistic == 'alpha':
+                # compute sim prct_means and
+                alphas_orig = self._coeff.T['Alpha']
+                alphas_sim  = self._coeff_sim[0,:,:].flatten()
+                alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:],prct,axis=0)
+                alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
+
+                # compute the ECDF of the samples
+                q_sim, p_sim = ecdf(alphas_sim_prct_mean)
+                q_orig, p_orig = ecdf(alphas_orig)
+            elif statistic == 't-stat':
+                # compute sim prct_means and
+                tstats_orig = self._tstats.T['t(Alpha)']
+                tstats_sim  = self._tstats_sim[0,:,:].flatten()
+                tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
+                tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+
+                # compute the ECDF of the samples
+                q_sim, p_sim = ecdf(tstats_sim_prct_mean)
+                q_orig, p_orig = ecdf(tstats_orig)
+            else:
+                raise ValueError("Statistic must be 'alpha' and/or 't-stat'")
+
+            # plot
+            axes.plot(q_orig, p_orig, '-k', lw=2, label='Actual CDF')
+            axes.plot(q_sim, p_sim, '-r',lw=2,
+                      label='Simulated alpha CDF'.format(statistic))
+            axes.set_xlabel(statistic)
+            axes.set_ylabel('Cumulative probability')
+            axes.legend(fancybox=True, loc='right')
+            axes.set_title('\n\nEmpirical CDF for actual and simulated {}'.\
+                            format(statistic),
+                            fontsize=12,fontweight='bold')
+
+        return fig, axes
+
+
+
+#     def plot_kde(self,statistic,fig=None,axes=None,*args,**kwargs):
+#         '''UPDATE DOC STRING
+#         '''
+#         if not self._has_sim:
+#             raise ValueError("No simulation data available!")
 #
-#         # arrays for plots
-#         alphas_orig = self._coeff.T['Alpha']
-#         alphas_sim  = self._coeff_sim[0,:,:].flatten()
-#         tstats_orig = self._tstats.T['t(Alpha)']
-#         tstats_sim  = self._tstats_sim[0,:,:].flatten()
-#         alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:], prct, axis=0)
-#         tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
-#         alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
-#         tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
-#
-#         # IMPLEMENT: function to call other plot functions dependent on type
-#         return figs, axes
-#
-#     def plot_cdf(self,statistic,fig=None,axes=None,*args,**kwargs):
-#         '''UPDATE DOC STRING'''
-#
-#         if type(statistic) is type([]):
+#         if type(statistic) is list:
 #             if axes is None:
 #                 fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
 #
 #             for i,stat,ax in zip(range(len(axes),statistic,axes):
-#                 _, axes[i] = self.plot_cdf(stat,axes=ax,*args,**kwargs)
+#                 _, axes[i] = self.plot_kde(stat,axes=ax,*args,**kwargs)
 #
 #         elif type(statistic) is str:
+#             prct = np.arange(1,100,1)
+#             # UPDATE FOR KDE DATA
+#             # below is just a copy paste version from plot_cdf
 #             if axes is None:
-#                 fig, axes = plt.subplots(nrows=1,ncols=1)
+#                 fig, axes = plt.subplots(nrows=1,ncols=1,figsize=figsize)
 #             if statistic == 'alpha':
-#                 # plot alphas
-#                 alpha = 1
-#             elif statistic == 'tstat':
-#                 # plot t-statistic
-#                 tstat = 1
+#                 # compute sim prct_means and
+#                 alphas_orig = self._coeff.T['Alpha']
+#                 alphas_sim  = self._coeff_sim[0,:,:].flatten()
+#                 alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:],prct,axis=0)
+#                 alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
+#
+#                 # compute the ECDF of the samples
+#                 q_sim, p_sim = ecdf(alphas_sim_prct_mean)
+#                 q_orig, p_orig = ecdf(alphas_orig)
+#             elif statistic == 't-stat':
+#                 # compute sim prct_means and
+#                 tstats_orig = self._tstats.T['t(Alpha)']
+#                 tstats_sim  = self._tstats_sim[0,:,:].flatten()
+#                 tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
+#                 tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+#
+#                 # compute the ECDF of the samples
+#                 q_sim, p_sim = ecdf(tstats_sim_prct_mean)
+#                 q_orig, p_orig = ecdf(tstats_orig)
 #             else:
-#                 raise ValueError("Statistic must be 'alpha' and/or 'tstat'")
-#         if fig is None:
-#             return None, axes
-#         else:
-#             return fig, axes
-#         prct = np.arange(1,100,1)
+#                 raise ValueError("Statistic must be 'alpha' and/or 't-stat'")
 #
-#         # arrays for plots
-#         alphas_orig = self._coeff.T['Alpha']
-#         alphas_sim  = self._coeff_sim[0,:,:].flatten()
-#         tstats_orig = self._tstats.T['t(Alpha)']
-#         tstats_sim  = self._tstats_sim[0,:,:].flatten()
-#         alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:], prct, axis=0)
-#         tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
-#         alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
-#         tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+#             # plot
+#             axes.plot(q_orig, p_orig, '-k', lw=2, label='Actual CDF')
+#             axes.plot(q_sim, p_sim, '-r',lw=2,
+#                       label='Simulated alpha CDF'.format(statistic))
+#             axes.set_xlabel(statistic)
+#             axes.set_ylabel('Cumulative probability')
+#             axes.legend(fancybox=True, loc='right')
+#             axes.set_title('\n\nEmpirical CDF for actual and simulated {}'.\
+#                             format(statistic),
+#                             fontsize=12,fontweight='bold')
 #
+#         return fig, axes
 #
+#     def plot_hist(self,statistic,fund=-1,fig=None,axes=None,*args,kwargs):
+#         '''UPDATE DOC STRING
+#         '''
+#         if type(statistic) is list:
+#             for stat in statistic:
+#                 self.plot_hist(statistic=stat,fund=fund,fig=fig,
+#                                axes=axes,*args,**kwargs)
+#         if type(fund) is type([]):
+#             for f in fund:
 #
-#         return figs, axes
-#
-#         def plot_kde(self,statistic,fig=None,axes=None,*args,**kwargs):
-#             '''UPDATE DOC STRING
-#             '''
-#             return fig, axes
-#
-#         def plot_hist(self,statistic,fund=-1,fig=None,axes=None,*args,kwargs):
-#             '''UPDATE DOC STRING
-#             '''
-#             if type(statistic) is type([]):
-#                 for stat in statistic:
-#                     self.plot_hist(statistic=stat,fund=fund,fig=fig,
-#                                    axes=axes,*args,**kwargs)
-#             if type(fund) is type([]):
-#                 for f in fund:
-#
-#             return fig, axes
+#         return fig, axes
 # # Generate CDF plot for alphas:
 #
 # # compute the ECDF of the samples
