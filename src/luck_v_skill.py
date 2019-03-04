@@ -106,6 +106,8 @@ def OLS_HAC(Y, X, add_const=True,maxLag=mLag):
     maxLag: func, Default = lambda x: numpy.floor((4*x/100)**(2/9)).astype(int)
         - Lag selection function for HAC-NW SE's
 
+    NOTE: no NaN values in y or x will work.
+
     OUTPUT: (beta,hac_bse)
     ------
     beta: ndarray, (k,1)
@@ -143,6 +145,7 @@ class AlphaEvaluator:
     from provided datasets, runs simulations of fund returns, and compares
     actual observations to simulated fund returns using a KAPM model.
     '''
+    # initialize object
     def __init__(self,fund_data=None,factor_data=None,
         parse_dates=[['Dates'],['Dates']],fund_names=None,factor_names=None):
         '''AlphaEvaluator is a class used to evaluate the alpha of funds.
@@ -174,6 +177,7 @@ class AlphaEvaluator:
                            fund_names=fund_names,factor_names=factor_names,
                            parse_dates=parse_dates)
 
+    # load dataframe into object
     def load_data(self,fund_data,factor_data,fund_names=None,factor_names=None,
         parse_dates=[['Dates'],['Dates']]):
         '''Function for loading observed fund and factor data into the AlphaEvaluator
@@ -222,14 +226,29 @@ class AlphaEvaluator:
 
         return self
 
-    def fit(self,min_obs=120,*args,**kwargs):
+    # fit HAC OLS regressions to original data
+    def fit(self,min_obs=120,risk_free='RF',market_RF=True,
+            market_return='Mkt',fund_RF=False,*args,**kwargs):
         '''Fit regressions to the fund and factor data. If data not passed in yet,
         pass in fund_data and factor_data here. Takes, pd.DataFrames, np.arrays
         if you also pass fund and factor names, or paths to .csv files.
-
-        OUTPUT: self
-
-        UPDATE DOC STRING
+        INPUT
+        -----
+        min_obs: int, 0 <= min_obs <= n_obs
+            - minimum number of not NaN values in fund data to be included
+        risk_free: str, Default = 'RF'
+            - name of risk free rate column in factors dataframe
+        market_RF: bool, Default=True
+            - market returns are net risk free rate. If False, pass in col for
+            market_return so it can be netted
+        market_return: str, Default = 'Mkt'
+            - name of market return col in factors dataframe
+        fund_RF: bool, Default=False
+            - fund returns are net risk free rate. If False, returns net of
+            risk free rate are calculated and used in regressions
+        OUTPUT
+        ------
+        self: fitted AlphaEvaluator with statistics on original data.
         '''
         # check for updates to parameters
         self.min_obs = min_obs
@@ -248,10 +267,25 @@ class AlphaEvaluator:
         # Make data regression friendly
         self.Y = self.Y_raw.loc[:, (self.Y_raw.count().values > min_obs)]
         self.X = self.X_raw.copy()
-        self.Y = self.Y.sub(self.X.pop('RF'),axis=0)
+
+        if (not fund_RF) or (not market_RF):
+            try:
+                self.RF_series
+            except:
+                try:
+                    self.RF_series = self.X.pop(risk_free) # risk free rate series
+                except ValueError:
+                    print("No risk free data found in factors dataframe!")
+
+        if not market_RF:
+            self.X[market_return] -= self.RF_series
+        if not fund_RF:
+            self.Y = self.Y.sub(self.RF_series,axis=0)
+
         self.funds = list(self.Y.columns)
         self.factors = list(self.X.columns)
-        self.X.insert(0, 'const', float(1)) # insert column of ones for the constant in regression
+        if 'const' not in self.X.columns:
+            self.X.insert(0, 'const', float(1)) # insert column of ones for the constant in regression
 
         # Make space for regression results
         coeff_names = ['Alpha']
@@ -273,7 +307,6 @@ class AlphaEvaluator:
             # store outcomes
             self._coeff.iloc[:,fund] = beta
             self._coeffSE.iloc[:,fund] = hac_bse
-            # self._tstats.iloc[:,fund] = t_stats
 
         # Record that regressions are done
         self._is_fit = True
@@ -295,6 +328,7 @@ class AlphaEvaluator:
 
         return self
 
+    # simulate random fund returns and fit regressions to each
     def simulate(self,n_simulations,random_seed=None,verbose=False,sim_std=0,
         sim_cutoff=15,*args,**kwargs):
         '''Simulate fund returns. Stores the simulation results under the
@@ -397,6 +431,7 @@ class AlphaEvaluator:
 
         return self
 
+    # calculate and store percentile data for tables and plots
     def get_percentiles(self,pct_range=np.arange(1,10)/10,top_n=5,
                         verbose=False,sim_percentiles=True,*args,**kwargs):
         '''Adds/updates tables of percentiles of actual data vs simulated to the
@@ -423,13 +458,14 @@ class AlphaEvaluator:
             top_n = 5
         for i in range(top_n-1):
             if i==0:
-                idx_b.append('2nd')
+                idx_b.append('2nd Worst')
             elif i==1:
-                idx_b.append('3rd')
+                idx_b.append('3rd Worst')
             else:
-                idx_b.append('{}th'.format(i+2))
+                idx_b.append('{}th Worst'.format(i+2))
         idx_t = idx_b[::-1]
-        idx_t[-1] ='Best'
+        for i,id_t in enumerate(idx_t):
+            idx_t[i] = id_t.replace('Worst','Best')
         idx_m = ['{}%'.format(int(pct*100)) for pct in pct_range]
         idx = idx_b + idx_m + idx_t
         idx_series = pd.Series(idx)
@@ -485,6 +521,9 @@ class AlphaEvaluator:
                                     np.nanpercentile(self._tstats_sim[0,:,:].T,
                                                      percentages100, axis = 1), \
                                     sim_t_top_n))
+            # store for histogram plots
+            self._pct_sim_a = percentiles_sim_a
+            self._pct_sim_t = percentiles_sim_t
 
             mean_percentiles_sim_a = np.nanmean(percentiles_sim_a, axis=1)
             mean_percentiles_sim_t = np.nanmean(percentiles_sim_t, axis=1)
@@ -536,14 +575,16 @@ class AlphaEvaluator:
         stat_list = type(statistic) is list
         if not plot_list:
             plot_type = [plot_type]
-
         if plot_list:
             nrows = len(plot_type)
         if stat_list:
             ncols = len(statistic)
 
+        # figsize
+        figsize = (ncols*7,(nrows+n_funds-1)*4)
+
         # create plot objects
-        fig, axes = plt.subplots(nrows=nrows*n_funds,ncols=ncols)
+        fig, axes = plt.subplots(nrows=nrows+n_funds-1,ncols=ncols, figsize=figsize)
         prct = np.arange(1,100,1)
 
         # Make plots
@@ -558,7 +599,8 @@ class AlphaEvaluator:
                                                 fund=fund)
             else:
                 raise ValueError("Invalid plot type. Only 'cdf','kde','hist'.")
-        return figs, axes
+
+        return fig, axes
 
     # PLOTS CDF (can be called independent of plot function)
     def plot_cdf(self,statistic,fig=None,axes=None,*args,**kwargs):
@@ -570,7 +612,7 @@ class AlphaEvaluator:
             if axes is None:
                 fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
 
-            for i,stat,ax in zip(range(len(axes),statistic,axes):
+            for i,stat,ax in zip(range(len(axes)),statistic,axes):
                 _, axes[i] = self.plot_cdf(stat,axes=ax,*args,**kwargs)
 
         elif type(statistic) is str:
@@ -581,7 +623,7 @@ class AlphaEvaluator:
                 # compute sim prct_means and
                 alphas_orig = self._coeff.T['Alpha']
                 alphas_sim  = self._coeff_sim[0,:,:].flatten()
-                alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:],prct,axis=0)
+                alphas_sim_prct = np.nanpercentile(self._coeff_sim[0,:,:],prct,axis=0)
                 alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
 
                 # compute the ECDF of the samples
@@ -591,7 +633,7 @@ class AlphaEvaluator:
                 # compute sim prct_means and
                 tstats_orig = self._tstats.T['t(Alpha)']
                 tstats_sim  = self._tstats_sim[0,:,:].flatten()
-                tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
+                tstats_sim_prct = np.nanpercentile(self._tstats_sim[0,:,:], prct, axis=0)
                 tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
 
                 # compute the ECDF of the samples
@@ -607,175 +649,129 @@ class AlphaEvaluator:
             axes.set_xlabel(statistic)
             axes.set_ylabel('Cumulative probability')
             axes.legend(fancybox=True, loc='right')
-            axes.set_title('\n\nEmpirical CDF for actual and simulated {}'.\
+            axes.set_title('\nEmpirical CDF for actual and simulated {}'.\
                             format(statistic),
                             fontsize=12,fontweight='bold')
 
         return fig, axes
 
+    # PLOTS KDE (capable of independent calls)
+    def plot_kde(self,statistic,fig=None,axes=None,*args,**kwargs):
+        '''UPDATE DOC STRING
+        '''
+        if not self._has_sim:
+            raise ValueError("No simulation data available!")
 
+        if type(statistic) is list:
+            if axes is None:
+                fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
 
-#     def plot_kde(self,statistic,fig=None,axes=None,*args,**kwargs):
-#         '''UPDATE DOC STRING
-#         '''
-#         if not self._has_sim:
-#             raise ValueError("No simulation data available!")
-#
-#         if type(statistic) is list:
-#             if axes is None:
-#                 fig, axes = plt.subplots(nrows=1,ncols=len(statistic))
-#
-#             for i,stat,ax in zip(range(len(axes),statistic,axes):
-#                 _, axes[i] = self.plot_kde(stat,axes=ax,*args,**kwargs)
-#
-#         elif type(statistic) is str:
-#             prct = np.arange(1,100,1)
-#             # UPDATE FOR KDE DATA
-#             # below is just a copy paste version from plot_cdf
-#             if axes is None:
-#                 fig, axes = plt.subplots(nrows=1,ncols=1,figsize=figsize)
-#             if statistic == 'alpha':
-#                 # compute sim prct_means and
-#                 alphas_orig = self._coeff.T['Alpha']
-#                 alphas_sim  = self._coeff_sim[0,:,:].flatten()
-#                 alphas_sim_prct = np.percentile(self._coeff_sim[0,:,:],prct,axis=0)
-#                 alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
-#
-#                 # compute the ECDF of the samples
-#                 q_sim, p_sim = ecdf(alphas_sim_prct_mean)
-#                 q_orig, p_orig = ecdf(alphas_orig)
-#             elif statistic == 't-stat':
-#                 # compute sim prct_means and
-#                 tstats_orig = self._tstats.T['t(Alpha)']
-#                 tstats_sim  = self._tstats_sim[0,:,:].flatten()
-#                 tstats_sim_prct = np.percentile(self._tstats_sim[0,:,:], prct, axis=0)
-#                 tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
-#
-#                 # compute the ECDF of the samples
-#                 q_sim, p_sim = ecdf(tstats_sim_prct_mean)
-#                 q_orig, p_orig = ecdf(tstats_orig)
-#             else:
-#                 raise ValueError("Statistic must be 'alpha' and/or 't-stat'")
-#
-#             # plot
-#             axes.plot(q_orig, p_orig, '-k', lw=2, label='Actual CDF')
-#             axes.plot(q_sim, p_sim, '-r',lw=2,
-#                       label='Simulated alpha CDF'.format(statistic))
-#             axes.set_xlabel(statistic)
-#             axes.set_ylabel('Cumulative probability')
-#             axes.legend(fancybox=True, loc='right')
-#             axes.set_title('\n\nEmpirical CDF for actual and simulated {}'.\
-#                             format(statistic),
-#                             fontsize=12,fontweight='bold')
-#
-#         return fig, axes
-#
-#     def plot_hist(self,statistic,fund=-1,fig=None,axes=None,*args,kwargs):
-#         '''UPDATE DOC STRING
-#         '''
-#         if type(statistic) is list:
-#             for stat in statistic:
-#                 self.plot_hist(statistic=stat,fund=fund,fig=fig,
-#                                axes=axes,*args,**kwargs)
-#         if type(fund) is type([]):
-#             for f in fund:
-#
-#         return fig, axes
-# # Generate CDF plot for alphas:
-#
-# # compute the ECDF of the samples
-# qe, pe = ecdf(alphas_sim_prct_mean)
-# q, p = ecdf(alphas_orig)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(8,6))
-# ax.plot(q, p, '-k', lw=2, label='Actual CDF')
-# ax.plot(qe, pe, '-r', lw=2, label='Simulated alpha CDF')
-# ax.set_xlabel('alpha')
-# ax.set_ylabel('Cumulative probability')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nEmpirical CDF for actual and simulated alpha', fontsize=15,fontweight='bold')
-# plt.show()
-#
-# # Generate CDF plot for t(alphas):
-# # compute the ECDF of the samples
-# qe, pe = ecdf(tstats_sim_prct_mean)
-# qt, pt = ecdf(tstats_orig)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(8,6))
-# ax.plot(qt, pt, '-k', lw=2, label='Actual CDF')
-# ax.plot(qe, pe, '-r', lw=2, label='Simulated t(alpha) CDF')
-# ax.set_xlabel('t(alpha)')
-# ax.set_ylabel('Cumulative probability')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nEmpirical CDF for actual and simulated t(alpha)', fontsize=15,fontweight='bold')
-# plt.show()
-#
-# #   Generate Kernel smoothing density estimate plot for alphas:
-#
-# kde1 = stats.gaussian_kde(alphas_orig)
-# kde2 = stats.gaussian_kde(alphas_sim_prct_mean)
-# x1 = np.linspace(alphas_orig.min(), alphas_orig.max(), 100)
-# x2 = np.linspace(alphas_sim_prct_mean.min(), alphas_sim_prct_mean.max(), 100)
-# p1 = kde1(x1)
-# p2 = kde2(x2)
-#
-# fig, ax = plt.subplots(1, 1, figsize=(9,6))
-# ax.plot(x1, p1, '-k', lw=2, label='Actual')
-# ax.plot(x2, p2, '-r', lw=2, label='Simulated')
-# ax.set_xlabel('Alpha %')
-# ax.set_ylabel('Frequency')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nKernel smoothing density estimate for actual and simulated alpha',
-#           fontsize=15,fontweight='bold')
-# plt.show()
-#
-#
-# # Generate Kernel smoothing density estimate plot for t-stats of alpha
-# kde3 = stats.gaussian_kde(tstats_orig)
-# kde4 = stats.gaussian_kde(tstats_sim_prct_mean)
-# x3 = np.linspace(tstats_orig.min(), tstats_orig.max(), 100)
-# x4 = np.linspace(tstats_sim_prct_mean.min(), tstats_sim_prct_mean.max(), 100)
-# p3 = kde3(x3)
-# p4 = kde4(x4)
-#
-# # plot
-# fig, ax = plt.subplots(1, 1, figsize=(9,6))
-# ax.plot(x3, p3, '-k', lw=2, label='Actual')
-# ax.plot(x4, p4, '-r', lw=2, label='Simulated')
-# ax.set_xlabel('t(-alpha)')
-# ax.set_ylabel('Frequency')
-# ax.legend(fancybox=True, loc='right')
-# plt.title('\n\nKernel smoothing density estimate for actual and simulated t(alpha)',
-#           fontsize=15,fontweight='bold')
-# plt.show()
-#
-# # HISTOGRAMS
-# # temp_input needs to be the percentile of choice
-# # example: best = -1, worst = 0
-# temp_t = self.iloc[:,0].values[temp_input]
-# # temp_t = np.vstack(percentiles_orig_t)[temp_input]
-#
-# # BEST
-# plt.figure(figsize=(9,6))
-# result = plt.hist(tstats_sim_prct[temp_input,:][~np.isnan(tstats_sim_prct[temp_input,:])],
-#                   bins=25, color='c', edgecolor='k', alpha=0.65)
-# plt.axvline(temp_t, color='k', linestyle='dashed', linewidth=1)
-# plt.title('\n\nBootstrapped t-statistics of t(alpha): Best fund', fontsize=15, fontweight='bold')
-# labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
-# plt.legend(labels)
-# plt.show()
-#
-# # WORST
-# temp_input = 0
-# temp_t = np.vstack(percentiles_orig_t)[temp_input]
-#
-# plt.figure(figsize=(9,6))
-# result = plt.hist(temp_percentiles_sim_t[temp_input,:][~np.isnan(temp_percentiles_sim_t[temp_input,:])],
-#                   bins=25, color='c', edgecolor='k', alpha=0.65)
-# plt.axvline(np.vstack(percentiles_orig_t)[temp_input], color='k', linestyle='dashed', linewidth=1)
-# plt.title('\n\nBootstrapped t-statistics of t(alpha): Worst fund', fontsize=15, fontweight='bold')
-# labels= ['$Actual: t(alpha) = {0:.2f}$'.format(float(temp_t)), 'Simulated t(alpha)']
-# plt.legend(labels)
-# plt.show()
+            for i,stat,ax in zip(range(len(axes)),statistic,axes):
+                _, axes[i] = self.plot_kde(stat,axes=ax,*args,**kwargs)
+
+        elif type(statistic) is str:
+            # percent series used for getiing percentiles
+            prct = np.arange(1,100,1)
+            if axes is None:
+                fig, axes = plt.subplots(nrows=1,ncols=1,figsize=figsize)
+            if statistic == 'alpha':
+                # compute sim prct_means and
+                alphas_orig = self._coeff.T['Alpha']
+                alphas_sim  = self._coeff_sim[0,:,:].flatten()
+                alphas_sim_prct = np.nanpercentile(self._coeff_sim[0,:,:],prct,axis=0)
+                alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
+
+                # kde series
+                kde1 = stats.gaussian_kde(alphas_orig)
+                kde2 = stats.gaussian_kde(alphas_sim_prct_mean)
+                x1 = np.linspace(alphas_orig.min(), alphas_orig.max(), 100)
+                x2 = np.linspace(alphas_sim_prct_mean.min(), alphas_sim_prct_mean.max(), 100)
+                p1 = kde1(x1)
+                p2 = kde2(x2)
+            elif statistic == 't-stat':
+                # compute sim prct_means and
+                tstats_orig = self._tstats.T['t(Alpha)']
+                tstats_sim  = self._tstats_sim[0,:,:].flatten()
+                tstats_sim_prct = np.nanpercentile(self._tstats_sim[0,:,:], prct, axis=0)
+                tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
+
+                # kde series
+                kde1 = stats.gaussian_kde(tstats_orig)
+                kde2 = stats.gaussian_kde(tstats_sim_prct_mean)
+                x1 = np.linspace(tstats_orig.min(), tstats_orig.max(), 100)
+                x2 = np.linspace(tstats_sim_prct_mean.min(), tstats_sim_prct_mean.max(), 100)
+                p1 = kde1(x1)
+                p2 = kde2(x2)
+            else:
+                raise ValueError("Statistic must be 'alpha' and/or 't-stat'")
+
+            # plot kde
+            axes.plot(x1, p1, '-k', lw=2, label='Actual')
+            axes.plot(x2, p2, '-r', lw=2, label='Simulated')
+            axes.set_xlabel(statistic)
+            axes.set_ylabel('Frequency')
+            axes.legend(fancybox=True, loc='right')
+            axes.set_title('\nKernel smoothing density estimate for actual and'\
+                           + ' simulated {}'.format(statistic),
+                           fontsize=12,fontweight='bold')
+        return fig, axes
+
+    def plot_hist(self,statistic,fund=-1,fig=None,axes=None,*args,**kwargs):
+        '''UPDATE DOC STRING
+        '''
+        if not self._has_sim:
+            raise ValueError("No simulation data available!")
+        elif not self._has_percentiles:
+            raise ValueError("No percentiles tables available!")
+        else:
+            fund_titles = list(self.data_a.index)
+
+        if axes is None:
+            nrows,ncols=1,1
+            if type(fund) is not int:
+                nrows *= len(fund)
+            if type(statistic) is list:
+                ncols *= len(statistic)
+            fig, axes = plt.subplot(nrows=nrows,ncols=ncols)
+
+        # plot each fund on different row of axes
+        if type(fund) is not int:
+            for i,f in enumerate(fund):
+                _, axes[i] = self.plot_hist(statistic=statistic,fund=f,
+                                            axes=axes[i],*args,**kwargs)
+        # plot each statistic on different column of given row of axes
+        elif type(statistic) is list:
+            for i,stat in enumerate(statistic):
+                _, axes[i] = self.plot_hist(statistic=stat,axes=axes[i],fund=fund,
+                                            *args,**kwargs)
+        elif type(statistic) is str:
+            prct = np.arange(1,100,1)
+            if statistic == 'alpha':
+                # locate fund percentiles in stored simulated percentiles
+                fund_pct = self._pct_sim_a[fund,:][~np.isnan(self._pct_sim_t[fund,:])]
+
+                # alpha for chosen fund in vertical line plot
+                vert_val = self.data_a.iloc[:,0].values[fund]
+
+            elif statistic == 't-stat':
+                # locate fund percentiles in stored simulated percentiles
+                fund_pct = self._pct_sim_t[fund,:][~np.isnan(self._pct_sim_t[fund,:])]
+
+                # t-stat for chosen fund in vertical line plot
+                vert_val = self.data_t.iloc[:,0].values[fund]
+            else:
+                raise ValueError("Statistic must be 'alpha' and/or 't-stat'")
+
+            # plot histogram
+            axes.hist(fund_pct,bins=25, color='c', edgecolor='k', alpha=0.65)
+            axes.axvline(vert_val, color='k', linestyle='dashed', linewidth=1)
+
+            # histogram titles and labels
+            title = '\nBootstrapped {}s: {} fund'\
+                    .format(statistic,fund_titles[fund])
+            axes.set_title(title,fontsize=12, fontweight='bold')
+            labels= ['$Actual: {} = {:.2f}$'.format(statistic,float(vert_val)),
+                     'Simulated {}'.format(statistic)]
+            axes.legend(labels)
+
+        return fig, axes
