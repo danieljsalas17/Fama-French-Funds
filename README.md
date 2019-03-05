@@ -6,11 +6,23 @@ Factor datasets are available at Ken French's website [here](http://mba.tuck.dar
 
 Fund data must be self provided.
 
-## Global Funds
-Comparisons of percentiles in data to simulations:
+## Actual vs Simulations: Percentile Comparisons
+Fama-French style comparisons of actual fund returns to the percentiles of
+simulated fund returns. Tables contain the actual percentiles of fund returns and
+the mean percentile simulated returns at increasing levels of assumed alpha variance.
+The charts contain cdf plots, kde plots, and histograms for the best and worst funds.
+
+### Global Funds
 #### 3 Factor Model
-* [alpha](tables/Global-3factor-alphas.csv)
-* [t-stats](tables/Global-3factor-tstats.csv)
+* alpha: [table](tables/Global-3factor-alphas.csv)
+* t-statistics: [table](tables/Global-3factor-tstats.csv)
+![Charts for alpha and t-statistics for the t-test of alpha vs. zero.](charts/Global-3factor-plots.png)
+
+### EM Funds
+#### 3 Factor Model
+* alpha: [table](tables/EM-3factor-alphas.csv)
+* t-statistics: [table](tables/EM-3factor-tstats.csv)
+![Charts for alpha and t-statistics for the t-test of alpha vs. zero.](charts/EM-3factor-plots.png)
 
 ## Acknowledgements
 Original idea was to replicate a Fama, French (2010) finding for given dataset. The base structure of the code is borrowed
