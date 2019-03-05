@@ -1,5 +1,6 @@
 #Preliminaries
 import numpy as np
+import numpy
 import pandas as pd
 import random
 import statsmodels.api as sm
@@ -297,7 +298,7 @@ class AlphaEvaluator:
         self._coeffSE = pd.DataFrame(index=coeff_names, columns = self.funds)
 
         # make array of non-null sample counts for each fund
-        self._n_i = (~np.isnan(self.Y)).sum(axis=0)
+        self._n_i = (~np.isnan(self.Y.values)).sum(axis=0)
 
         # Run regressions for each fund
         for fund in range(len(self.funds)):
@@ -322,10 +323,10 @@ class AlphaEvaluator:
 
         # store residuals and regression standard error
         Y_pred = np.dot(self.X.values,self._coeff.values)
-        self._resids = self.Y.values - Y_pred             # residuals
+        self._resids = self.Y.values - Y_pred # residuals
         orig_SSR = np.nansum(self._resids**2,0)           # sum squared residuals
-        self._SE_resid = np.divide(np.sqrt(orig_SSR), (self._n_i-self.X.shape[1])) # standard errors
-
+        self._SE_resid = (orig_SSR**(1/2))/(self._n_i-self.X.shape[1]) # standard errors of residuals
+        self._SE_resid_ratio = self._SE_resid/self._SE_resid.mean() # ratio of SE's to mean SE
         return self
 
     # simulate random fund returns and fit regressions to each
@@ -343,6 +344,7 @@ class AlphaEvaluator:
         if random_seed is not None:
             np.random.seed(seed=random_seed)
 
+        # check that model is already fit, if not, fit it.
         if not self._is_fit:
             if verbose:
                 print("Need to fit data first!")
@@ -351,6 +353,7 @@ class AlphaEvaluator:
             else:
                 self.fit()
 
+        # check for change in max lag function
         if 'olskwgs' in kwargs.keys():
             if 'maxLag' in kwargs['olskwgs'].keys():
                 self.maxLag = kwargs['olskwgs']['maxLag']
@@ -359,69 +362,47 @@ class AlphaEvaluator:
         n_factors = self.X.shape[1]-1
         n_funds = self.Y.shape[1]
         self.sim_std = sim_std
-        annual_std_alpha = sim_std
         std_alpha = sim_std/np.sqrt(12)
-        orig_betas = self._coeff.sort_values(by='Alpha', axis=1, ascending=False).values[1:,:]
+        orig_betas = self._coeff.values[1:,:] # .sort_values(by='Alpha', axis=1, ascending=False)
         self.n_simulations = n_simulations
 
         if verbose:
-            print("Annual standard deviation: {:.2f}, Standard deviation alpha: {:.2f}"\
-                  .format(annual_std_alpha, std_alpha))
+            print("Annual standard deviation: {:.2f}, Monthly standard deviation alpha: {:.2f}"\
+                  .format(sim_std, std_alpha))
 
-        # Make empty arrays
-        self.X_sim = np.empty((n_obs,n_factors,n_simulations))*np.nan # X_mats for each simulation
-        self.Y_sim = np.empty((n_obs,n_funds,n_simulations))*np.nan   # n_funds fund returns for each sim
-        self._resids_sim = np.empty((n_obs,n_funds,n_simulations))*np.nan
+        # Populate target output vectors to be filled in with loop:
+        self._tstats_sim = np.zeros((n_funds,n_simulations))
+        self._tstats_sim.fill(np.nan)
+        self._alphas_sim = np.zeros((n_funds,n_simulations))
+        self._alphas_sim.fill(np.nan)
+
+        # randomized indices for simulations
         sim_indices = np.random.randint(0, n_obs, size=(n_obs,n_simulations))
 
-        temp_avg_orig_std_resid = np.nanmean(self._SE_resid.values)
-        temp_std_resid_ratio = np.divide(self._SE_resid,temp_avg_orig_std_resid)
-
-        temp_alpha = std_alpha*np.tile(\
-                     np.random.randn(1,n_funds,n_simulations) * np.tile(temp_std_resid_ratio, \
-                     (1,1,n_simulations)).reshape((1,n_funds,n_simulations), order='F'),(n_obs,1,1))
-
-        # Fill simulated X,Y and residuals arrays
-        for ss in range(n_simulations):
-            # randomized simulations of Fama-French risk factors: Mkt-RF, SMB, HML
-            self.X_sim[:,:,ss] = self.X.values[sim_indices[:,ss],1:]
-
-            # randomized simulations of residuals from Fama-French equations
-            self._resids_sim[:,:,ss] = self._resids[sim_indices[:,ss],:]
-
-            #simulated returns based on fund betas, randomized resids and alphas (0?)
-
-            self.Y_sim[:,:,ss] = temp_alpha[:,:,ss] + self.X_sim[:,:,ss].dot(orig_betas) \
-                                +self._resids_sim[:,:,ss]
         # regressions
         if verbose:
             print("Starting {:,} regressions...".format(n_simulations*n_funds))
 
-        # Populate target output vectors to be filled in with loop:
-        self._coeffSE_sim = np.empty((n_factors+1,n_funds,n_simulations))*np.nan
-        self._coeff_sim = np.empty((n_factors+1,n_funds,n_simulations))*np.nan
-
-        # Calculate number of observations per fund per simulation for future
-        # reference:
-        n_i_s = (~np.isnan(self.Y_sim)).sum(0)
-
-        # Calculate the lag selection parameter for the standard Newey-West HAC
-        # estimate (Andrews and Monohan, 1992), one number per fund per simulation:
-
         # Loop through each simulation run:
         for ss in range(n_simulations):
+            # create X_sim and Y_sim
+            Y_sim,X_sim = self._sim_YX(ridx = sim_indices[:,ss],
+                                       betas= orig_betas,
+                                       std_alpha = std_alpha)
+
+            # make mask and counts for observed returns
+            not_nan = ~np.isnan(Y_sim)
+            n_obs_sim = not_nan.sum(axis=0)
             #Loop through each fund:
             for jj in range(n_funds):
-                if n_i_s[jj,ss]>= sim_cutoff:
-                    x_sim = self.X_sim[:,:,ss]
-                    y_sim = self.Y_sim[:,jj,ss]
+                if n_obs_sim[jj]>= sim_cutoff:
+                    # identify simulated returns and factor series
+                    y_sim, x_sim = Y_sim[not_nan[:,jj],jj], X_sim[not_nan[:,jj],:]
 
-                    # linear regression
+                    # HAC OLS and store alpha and t(alpha)
                     beta,hac_bse = OLS_HAC(y_sim,x_sim,maxLag=self.maxLag)
-                    self._coeffSE_sim[:,jj,ss] = hac_bse
-                    self._coeff_sim[:,jj,ss] = beta
-
-        self._tstats_sim = np.divide(self._coeff_sim,self._coeffSE_sim)
+                    self._alphas_sim[jj,ss] = beta[0]
+                    self._tstats_sim[jj,ss] = beta[0]/hac_bse[0]
 
         # DONE
         if verbose:
@@ -430,6 +411,27 @@ class AlphaEvaluator:
         self._has_sim = True
 
         return self
+
+    def _sim_YX(self,ridx,betas,std_alpha):
+        '''Returns randomly simulated Y and X arrays for a given random index
+        and monthly standard deviation of alpha
+        '''
+        X_sim = self.X.values[ridx,1:]
+        error_sim = self._resids[ridx,:]
+
+        # better way to do above is below
+        A = np.random.randn(self.Y.shape[1]) # random draws from normal distrib
+        B = self._SE_resid_ratio # ratio of resid standard errors to mean
+
+        # repeat for n obs, i.e. constant alpha over time
+        alpha_sim = std_alpha*np.repeat((A*B)[np.newaxis, :], X_sim.shape[0], axis=0)
+
+        # Make simulated Y's
+        # print(type(alpha_sim),alpha_sim.shape)
+        # print(type(X_sim),X_sim.shape)
+        # print(type(self._coeff.values),self._coeff_)
+        Y_sim = alpha_sim + X_sim.dot(betas) + error_sim
+        return Y_sim.astype(np.float64),X_sim.astype(np.float64)
 
     # calculate and store percentile data for tables and plots
     def get_percentiles(self,pct_range=np.arange(1,10)/10,top_n=5,
@@ -477,18 +479,19 @@ class AlphaEvaluator:
 
 
         # Sort original alphas and t-values in order to extract top/bottom ranked values:
-        temp_sorted_orig_a =  self._coeff.take([0], axis=0).sort_values(by=['Alpha'], axis=1, ascending = [0])
-        temp_sorted_orig_t = self._tstats.take([0], axis=0).sort_values(by=['t(Alpha)'], axis=1, ascending = [0])
+        sorted_orig_a = np.sort(self._coeff.values[0,:].astype(np.float64))
+        sorted_orig_t = np.sort(self._tstats.values[0,:].astype(np.float64))
+
 
         # percentiles: alphas and t-stats
-        percentiles_orig_a = [temp_sorted_orig_a.T.tail(top_n).iloc[::-1],
-                              np.nanquantile(a=temp_sorted_orig_a,q=percentages).reshape(-1,1),
-                              temp_sorted_orig_a.T.head(top_n).iloc[::-1]]
+        percentiles_orig_a = [sorted_orig_a[0:top_n].reshape(-1,1),
+                              np.nanquantile(a=sorted_orig_a,q=percentages).reshape(-1,1),
+                              sorted_orig_a[-top_n:].reshape(-1,1)]
         data_a['Actual'] = np.vstack(percentiles_orig_a)
 
-        percentiles_orig_t = [temp_sorted_orig_t.T.tail(top_n).iloc[::-1],
-                              np.nanquantile(a=temp_sorted_orig_t,q=percentages).reshape(-1,1),
-                              temp_sorted_orig_t.T.head(top_n).iloc[::-1]]
+        percentiles_orig_t = [sorted_orig_t[0:top_n].reshape(-1,1),
+                              np.nanquantile(a=sorted_orig_t,q=percentages).reshape(-1,1),
+                              sorted_orig_t[-top_n:].reshape(-1,1)]
         data_t['Actual'] = np.vstack(percentiles_orig_t)
 
         if sim_percentiles:
@@ -500,8 +503,8 @@ class AlphaEvaluator:
             # add insights from simulations
             # sorted simulations by alphas and t-stats
 
-            sort_asc_sim_a = np.sort(self._coeff_sim[0,:,:], axis=0)
-            sort_asc_sim_t = np.sort(self._tstats_sim[0,:,:], axis=0)
+            sort_asc_sim_a = np.sort(self._alphas_sim[:,:], axis=0)
+            sort_asc_sim_t = np.sort(self._tstats_sim[:,:], axis=0)
             sim_a_bot_n = sort_asc_sim_a[0:top_n,:]
             sim_t_bot_n = sort_asc_sim_t[0:top_n,:]
 
@@ -513,12 +516,12 @@ class AlphaEvaluator:
 
             # percentiles
             percentiles_sim_a = np.concatenate((sim_a_bot_n, \
-                                    np.nanpercentile(self._coeff_sim[0,:,:].T,
+                                    np.nanpercentile(self._alphas_sim[:,:].T,
                                                     percentages100, axis = 1), \
                                     sim_a_top_n))
 
             percentiles_sim_t = np.concatenate((sim_t_bot_n, \
-                                    np.nanpercentile(self._tstats_sim[0,:,:].T,
+                                    np.nanpercentile(self._tstats_sim[:,:].T,
                                                      percentages100, axis = 1), \
                                     sim_t_top_n))
             # store for histogram plots
@@ -622,8 +625,8 @@ class AlphaEvaluator:
             if statistic == 'alpha':
                 # compute sim prct_means and
                 alphas_orig = self._coeff.T['Alpha']
-                alphas_sim  = self._coeff_sim[0,:,:].flatten()
-                alphas_sim_prct = np.nanpercentile(self._coeff_sim[0,:,:],prct,axis=0)
+                alphas_sim  = self._alphas_sim[:,:].flatten()
+                alphas_sim_prct = np.nanpercentile(self._alphas_sim[:,:],prct,axis=0)
                 alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
 
                 # compute the ECDF of the samples
@@ -632,8 +635,8 @@ class AlphaEvaluator:
             elif statistic == 't-stat':
                 # compute sim prct_means and
                 tstats_orig = self._tstats.T['t(Alpha)']
-                tstats_sim  = self._tstats_sim[0,:,:].flatten()
-                tstats_sim_prct = np.nanpercentile(self._tstats_sim[0,:,:], prct, axis=0)
+                tstats_sim  = self._tstats_sim[:,:].flatten()
+                tstats_sim_prct = np.nanpercentile(self._tstats_sim[:,:], prct, axis=0)
                 tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
 
                 # compute the ECDF of the samples
@@ -677,8 +680,8 @@ class AlphaEvaluator:
             if statistic == 'alpha':
                 # compute sim prct_means and
                 alphas_orig = self._coeff.T['Alpha']
-                alphas_sim  = self._coeff_sim[0,:,:].flatten()
-                alphas_sim_prct = np.nanpercentile(self._coeff_sim[0,:,:],prct,axis=0)
+                alphas_sim  = self._alphas_sim[:,:].flatten()
+                alphas_sim_prct = np.nanpercentile(self._alphas_sim[:,:],prct,axis=0)
                 alphas_sim_prct_mean = np.nanmean(alphas_sim_prct, axis=1)
 
                 # kde series
@@ -691,8 +694,8 @@ class AlphaEvaluator:
             elif statistic == 't-stat':
                 # compute sim prct_means and
                 tstats_orig = self._tstats.T['t(Alpha)']
-                tstats_sim  = self._tstats_sim[0,:,:].flatten()
-                tstats_sim_prct = np.nanpercentile(self._tstats_sim[0,:,:], prct, axis=0)
+                tstats_sim  = self._tstats_sim[:,:].flatten()
+                tstats_sim_prct = np.nanpercentile(self._tstats_sim[:,:], prct, axis=0)
                 tstats_sim_prct_mean = np.nanmean(tstats_sim_prct, axis=1)
 
                 # kde series
@@ -748,7 +751,7 @@ class AlphaEvaluator:
             prct = np.arange(1,100,1)
             if statistic == 'alpha':
                 # locate fund percentiles in stored simulated percentiles
-                fund_pct = self._pct_sim_a[fund,:][~np.isnan(self._pct_sim_t[fund,:])]
+                fund_pct = self._pct_sim_a[fund,:][~np.isnan(self._pct_sim_a[fund,:])]
 
                 # alpha for chosen fund in vertical line plot
                 vert_val = self.data_a.iloc[:,0].values[fund]
