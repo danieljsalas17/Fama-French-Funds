@@ -1,5 +1,16 @@
 # Fama-French-Funds
 An exercise similar to Fama, French (2010). Goal is to identify and evaluate the luck vs skill of active managers.
+## Data
+
+Factor datasets are available at Ken French's website [here](http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html).
+
+Fund data must be self provided.
+
+## Global Funds
+Comparisons of percentiles in data to simulations:
+#### 3 Factor Model
+* [alpha](tables/Global-3factor-alphas.csv)
+* [t-stats](tables/Global-3factor-tstats.csv)
 
 ## Acknowledgements
 Original idea was to replicate a Fama, French (2010) finding for given dataset. The base structure of the code is borrowed
