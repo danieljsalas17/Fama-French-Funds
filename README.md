@@ -22,7 +22,7 @@ The charts contain cdf plots, kde plots, and histograms for the best and worst f
 #### 3 Factor Model
 * alpha: [table](tables/EM-3factor-alphas.csv)
 * t-statistics: [table](tables/EM-3factor-tstats.csv)
-![Charts for alpha and t-statistics for the t-test of alpha vs. zero.](charts/EM-3factor-plots.png)
+[Charts for alpha and t-statistics for the t-test of alpha vs. zero.](charts/EM-3factor-plots.png)
 
 ## Acknowledgements
 Original idea was to replicate a Fama, French (2010) finding for given dataset. The base structure of the code is borrowed

@@ -9,9 +9,9 @@ working with a couple hundred funds at a time. Originally, those programs took
 over an hour each, but eventually, I got them down to just under half an hour
 each. Now, the data I'm working with will have at least 2,000 funds. Before
 trying my hand at Spark, I want to try multiprocessing with numpy. This file
-will perform the Alpha Evaluation on US Large Mutual Fund data.
+will perform the Alpha Evaluation on Global Mutual Fund data.
 
-ACTUALLY: right now I'm just using global funds to see if it works faster.
+EVENTUALLY: I want to try it on US Large Mutual Fund data.
 
 I'm going to try abandoning the AlphaEvaluator class. As fun as it was, it
 might be useful to just have a series of functions if we use Pool().
@@ -349,7 +349,6 @@ def sim_alpha(ridx,Y,X,resids,betas,std_alpha,maxLag,sim_cutoff,RSE_ratio):
     n_obs_sim = not_nan.sum(axis=0)
     keep_funds = np.arange(n_funds)[n_obs_sim > sim_cutoff]
 
-    #Loop through each fund:
     for ff in keep_funds:
         # identify simulated returns and factor series
         y_sim, x_sim = Y_sim[not_nan[:,ff],ff], X_sim[not_nan[:,ff],:]
@@ -464,7 +463,7 @@ def simulate_MP2(n_sim,Y,X,betas,betas_se,random_seed=None,verbose=False,
 # TODO: Percentiles
 def get_percentiles(betas,betas_se,alphas_sim,alphas_se_sim,
                     sim_percentiles=True,verbose=False,top_n=5,
-                    pct_range=np.arange(1,10)/10,tickers=None,
+                    prct_range=np.arange(1,10)/10,tickers=None,
                     *args,**kwargs):
     '''Adds/updates tables of percentiles of actual data vs simulated to the
     AlphaEvaluator can be found under attributes: data_a and data_t
@@ -475,8 +474,8 @@ def get_percentiles(betas,betas_se,alphas_sim,alphas_se_sim,
     get_tickers = tickers is not None
 
     # percentile parameters
-    percentages = pct_range
-    percentages100 = (100*pct_range).astype(int)
+    percentages = prct_range
+    percentages100 = (100*prct_range).astype(int)
 
     # t-statistic for alpha
     tstats = betas[0,:]/betas_se[0,:]
@@ -515,7 +514,7 @@ def get_percentiles(betas,betas_se,alphas_sim,alphas_se_sim,
     idx_t = idx_b[::-1]
     for i,id_t in enumerate(idx_t):
         idx_t[i] = id_t.replace('Worst','Best')
-    idx_m = ['{}%'.format(int(pct*100)) for pct in pct_range]
+    idx_m = ['{}%'.format(int(pct*100)) for pct in prct_range]
     idx = idx_b + idx_m + idx_t
 
     # Label worst and best funds with corresponding tick name
@@ -803,20 +802,20 @@ def plot_hist(statistic=['alpha','t-stat'],data_a=None,data_t=None,
     elif type(statistic) is str:
         prct = np.arange(1,100,1)
         if statistic == 'alpha':
-            if (pct_sim_a is None) or (data_a is None):
+            if (prct_sim_a is None) or (data_a is None):
                 raise ValueError("Need alpha percentiles!")
             # locate fund percentiles in stored simulated percentiles
-            fund_pct = pct_sim_a[fund,:][~np.isnan(pct_sim_a[fund,:])]
+            fund_pct = prct_sim_a[fund,:][~np.isnan(prct_sim_a[fund,:])]
             # alpha for chosen fund in vertical line plot
             vert_val = data_a.values[fund,0]
             # fund_titles
             fund_titles = list(data_a.index)
 
         elif statistic == 't-stat':
-            if (pct_sim_t is None) or (data_t is None):
+            if (prct_sim_t is None) or (data_t is None):
                 raise ValueError("Need t-stat percentiles!")
             # locate fund percentiles in stored simulated percentiles
-            fund_pct = pct_sim_t[fund,:][~np.isnan(pct_sim_t[fund,:])]
+            fund_pct = prct_sim_t[fund,:][~np.isnan(prct_sim_t[fund,:])]
             # t-stat for chosen fund in vertical line plot
             vert_val = data_t.values[fund,0]
             # fund titles
@@ -848,12 +847,12 @@ if __name__ == "__main__":
     funds_path = path_stem + 'data/global_funds.csv'
     factors_path = path_stem + 'data/global_factors.csv'
     min_obs = 120
-    sim_cutoff = 15
+    sim_cutoff = 5
     n_simulations = 1000
     verbose = True # Prints out steps at all key functions
     random_seed = 2
     top_n = 5
-    pct_range = np.arange(1,10)/10 # percentiles to consider.  0 < x < 1
+    prct_range = np.arange(1,10)/10 # percentiles to consider.  0 < x < 1
     std_range = std_range = np.arange(1,16)/10 # st devs of alpha to simulate
     funds_hist = [-1,-2,-3,2,1,0]
     test_partial = False
@@ -921,10 +920,10 @@ if __name__ == "__main__":
     if verbose:
         title_print("PERCENTILES")
 
-    data_a,data_t,pct_sim_a,pct_sim_t = \
+    data_a,data_t,prct_sim_a,prct_sim_t = \
             get_percentiles(verbose=True,betas=B,betas_se=BSE,
                             alphas_sim=ALPH,alphas_se_sim=A_SE,
-                            pct_range=pct_range,top_n=top_n,tickers=txs)
+                            prct_range=prct_range,top_n=top_n,tickers=txs)
     # plots
     if verbose:
         print("Plotting cdf,kde,and histograms")
@@ -934,7 +933,7 @@ if __name__ == "__main__":
                            betas=B,tstats=B/BSE,
                            alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
                            data_a=data_a,data_t=data_t,fund=funds_hist,
-                           prct_sim_a=pct_sim_a,prct_sim_t=pct_sim_t)
+                           prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
 
     fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(0.))
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
@@ -958,10 +957,10 @@ if __name__ == "__main__":
             print("Complete!")
             print("Filling percentile tables...",end="")
 
-        data_a1,data_t1,pct_sim_a,pct_sim_t = \
+        data_a1,data_t1,prct_sim_a,prct_sim_t = \
                 get_percentiles(verbose=True,betas=B,betas_se=BSE,
                                 alphas_sim=ALPH,alphas_se_sim=A_SE,
-                                pct_range=pct_range,top_n=top_n,tickers=txs)
+                                prct_range=prct_range,top_n=top_n,tickers=txs)
 
         for col in data_a1.columns:
             data_a[col+" ({:.2f})".format(stdev)] = data_a1[col]
@@ -974,7 +973,7 @@ if __name__ == "__main__":
                                betas=B,tstats=B/BSE,
                                alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
                                data_a=data_a1,data_t=data_t1,fund=funds_hist,
-                               prct_sim_a=pct_sim_a,prct_sim_t=pct_sim_t)
+                               prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
 
         fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(stdev))
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])
