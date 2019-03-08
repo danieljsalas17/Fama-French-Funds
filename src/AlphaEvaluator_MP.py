@@ -107,19 +107,22 @@ def HAC_BSE(y,x,b,maxLag=mLag):
     https://www.stata.com/manuals13/tsnewey.pdf
     '''
     n,k = x.shape
-    m = maxLag(n)
-    r = y - x.dot(b)
+    m = mLag(n)
+    r = (y - x.dot(b)).reshape(n,)
     XXI = np.linalg.inv(x.T.dot(x))
     w = np.diag(r**2)
     XWX = x.T.dot(w).dot(x)
     for l in range(1,m+1):
         w = np.diag(r[l:]*r[:-l])
-        XWX += x[:-l,:].T.dot(w).dot(x[l:,:])
-        XWX += x[l:,:].T.dot(w).dot(x[:-l,:])
-        XWX *= (1-l/(m+1))
+        XWX_l  = np.zeros((k,k))
+        XWX_l += x[:-l,:].T.dot(w).dot(x[l:,:])
+        XWX_l += x[l:,:].T.dot(w).dot(x[:-l,:])
+        XWX_l *= (1-l/(m+1))
+        XWX += XWX_l
     XWX *= n/(n-k)
     var_B = XXI.dot(XWX).dot(XXI)
     return np.sqrt(abs(np.diag(var_B)))
+
 
 # Set up regression function with Newey-West Standard Errors (HAC)
 def OLS_HAC(Y, X, add_const=True,maxLag=mLag):
@@ -158,7 +161,6 @@ def OLS_HAC(Y, X, add_const=True,maxLag=mLag):
     # Get Results
     beta = np.linalg.inv(x.T.dot(x)).dot(x.T.dot(y)) # OLS coefficients
     hac_bse = HAC_BSE(y=y,x=x,b=beta,maxLag=maxLag) # HAC standard errors
-    t_stats = beta/hac_bse
     return beta, hac_bse
 
 # estimates cdf for sample of fund alphas/t(alphas)
@@ -847,8 +849,8 @@ if __name__ == "__main__":
     funds_path = path_stem + 'data/global_funds.csv'
     factors_path = path_stem + 'data/global_factors.csv'
     min_obs = 120
-    sim_cutoff = 5
-    n_simulations = 100
+    sim_cutoff = 15
+    n_simulations = 1000
     verbose = True # Prints out steps at all key functions
     random_seed = 2
     top_n = 5
@@ -928,6 +930,19 @@ if __name__ == "__main__":
     if verbose:
         print("Plotting cdf,kde,and histograms")
 
+    # Save plots with just best and worst for front page README.md
+    fig, axes = multi_plot(plot_type=['cdf','kde','hist'],
+                           statistic=['alpha','t-stat'],
+                           betas=B,tstats=B/BSE,
+                           alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
+                           data_a=data_a,data_t=data_t,fund=[-1,0],
+                           prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
+
+    fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(0.))
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+    plt.savefig(path_stem+'charts/Global-3factor-plots.png')
+
+    # Save plots with 3 best and 3 worst
     fig, axes = multi_plot(plot_type=['cdf','kde','hist'],
                            statistic=['alpha','t-stat'],
                            betas=B,tstats=B/BSE,
@@ -937,64 +952,63 @@ if __name__ == "__main__":
 
     fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(0.))
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plt.show()
-    # plt.savefig(path_stem+'charts/Global/3factor-plots-{}.png'.format(0))
-    # plt.clf()
-    # plt.close('all')
-    # #---------------------------------------------------------------------------
-    # # SIMULATE NEW STD ALPHAS
-    # #---------------------------------------------------------------------------
-    # n_std = len(std_range) + 1
-    #
-    # for i,stdev in enumerate(std_range):
-    #     if verbose:
-    #         title_print("Standard Deviation {} of {}".format(i+2,n_std))
-    #
-    #     ALPH,A_SE = simulate_MP(n_sim=n_simulations,Y=Y,X=X,betas=B,betas_se=BSE,
-    #                             random_seed=random_seed,verbose=True,
-    #                             sim_std=stdev,sim_cutoff=sim_cutoff)
-    #     # print first sim alphas and se's
-    #     if verbose:
-    #         print("Complete!")
-    #         print("Filling percentile tables...",end="")
-    #
-    #     data_a1,data_t1,prct_sim_a,prct_sim_t = \
-    #             get_percentiles(verbose=True,betas=B,betas_se=BSE,
-    #                             alphas_sim=ALPH,alphas_se_sim=A_SE,
-    #                             prct_range=prct_range,top_n=top_n,tickers=txs)
-    #
-    #     for col in data_a1.columns:
-    #         data_a[col+" ({:.2f})".format(stdev)] = data_a1[col]
-    #         data_t[col+" ({:.2f})".format(stdev)] = data_t1[col]
-    #
-    #     if verbose:
-    #         print("Plotting...",end='')
-    #     fig, axes = multi_plot(plot_type=['cdf','kde','hist'],
-    #                            statistic=['alpha','t-stat'],
-    #                            betas=B,tstats=B/BSE,
-    #                            alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
-    #                            data_a=data_a1,data_t=data_t1,fund=funds_hist,
-    #                            prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
-    #
-    #     fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(stdev))
-    #     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    #     plt.savefig(path_stem+'charts/Global/3factor-plots-{}.png'.format(i))
-    #     plt.clf()
-    #     plt.close('all')
-    #     print("DONE!")
-    # #----------------------------------------------------------------------------
-    # # END OF SIMULATIONS: SAVE TABLES
-    # #----------------------------------------------------------------------------
-    # if verbose:
-    #     title_print("END OF SIMULATIONS")
-    #
-    # data_a.to_csv(path_stem+'tables/Global-3factor-alphas.csv')
-    # data_t.to_csv(path_stem+'tables/Global-3factor-tstats.csv')
-    #
-    # # calculate time elapsed for program and print
-    # t_diff = time.time()-start_time
-    # minutes = int(np.floor(t_diff/60))
-    # seconds = t_diff - 60*minutes
-    # if verbose:
-    #     print("Saved!")
-    #     print("{} minutes and {:.2f} seconds elapsed for this program".format(minutes,seconds))
+    plt.savefig(path_stem+'charts/Global/3factor-plots-{}.png'.format(0))
+    plt.clf()
+    plt.close('all')
+    #---------------------------------------------------------------------------
+    # SIMULATE NEW STD ALPHAS
+    #---------------------------------------------------------------------------
+    n_std = len(std_range) + 1
+
+    for i,stdev in enumerate(std_range):
+        if verbose:
+            title_print("Standard Deviation {} of {}".format(i+2,n_std))
+
+        ALPH,A_SE = simulate_MP(n_sim=n_simulations,Y=Y,X=X,betas=B,betas_se=BSE,
+                                random_seed=random_seed,verbose=True,
+                                sim_std=stdev,sim_cutoff=sim_cutoff)
+        # print first sim alphas and se's
+        if verbose:
+            print("Complete!")
+            print("Filling percentile tables...",end="")
+
+        data_a1,data_t1,prct_sim_a,prct_sim_t = \
+                get_percentiles(verbose=True,betas=B,betas_se=BSE,
+                                alphas_sim=ALPH,alphas_se_sim=A_SE,
+                                prct_range=prct_range,top_n=top_n,tickers=txs)
+
+        for col in data_a1.columns:
+            data_a[col+" ({:.2f})".format(stdev)] = data_a1[col]
+            data_t[col+" ({:.2f})".format(stdev)] = data_t1[col]
+
+        if verbose:
+            print("Plotting...",end='')
+        fig, axes = multi_plot(plot_type=['cdf','kde','hist'],
+                               statistic=['alpha','t-stat'],
+                               betas=B,tstats=B/BSE,
+                               alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
+                               data_a=data_a1,data_t=data_t1,fund=funds_hist,
+                               prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
+
+        fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(stdev))
+        fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.savefig(path_stem+'charts/Global/3factor-plots-{}.png'.format(i+1))
+        plt.clf()
+        plt.close('all')
+        print("DONE!")
+    #----------------------------------------------------------------------------
+    # END OF SIMULATIONS: SAVE TABLES
+    #----------------------------------------------------------------------------
+    if verbose:
+        title_print("END OF SIMULATIONS")
+
+    data_a.to_csv(path_stem+'tables/Global-3factor-alphas.csv')
+    data_t.to_csv(path_stem+'tables/Global-3factor-tstats.csv')
+
+    # calculate time elapsed for program and print
+    t_diff = time.time()-start_time
+    minutes = int(np.floor(t_diff/60))
+    seconds = t_diff - 60*minutes
+    if verbose:
+        print("Saved!")
+        print("{} minutes and {:.2f} seconds elapsed for this program".format(minutes,seconds))

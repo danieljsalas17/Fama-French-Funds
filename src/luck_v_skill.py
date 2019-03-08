@@ -75,16 +75,18 @@ def HAC_BSE(y,x,b,maxLag=mLag):
     https://www.stata.com/manuals13/tsnewey.pdf
     '''
     n,k = x.shape
-    m = maxLag(n)
-    r = y - x.dot(b)
+    m = mLag(n)
+    r = (y - x.dot(b)).reshape(n,)
     XXI = np.linalg.inv(x.T.dot(x))
     w = np.diag(r**2)
     XWX = x.T.dot(w).dot(x)
     for l in range(1,m+1):
         w = np.diag(r[l:]*r[:-l])
-        XWX += x[:-l,:].T.dot(w).dot(x[l:,:])
-        XWX += x[l:,:].T.dot(w).dot(x[:-l,:])
-        XWX *= (1-l/(m+1))
+        XWX_l  = np.zeros((k,k))
+        XWX_l += x[:-l,:].T.dot(w).dot(x[l:,:])
+        XWX_l += x[l:,:].T.dot(w).dot(x[:-l,:])
+        XWX_l *= (1-l/(m+1))
+        XWX += XWX_l
     XWX *= n/(n-k)
     var_B = XXI.dot(XWX).dot(XXI)
     return np.sqrt(abs(np.diag(var_B)))
@@ -427,9 +429,6 @@ class AlphaEvaluator:
         alpha_sim = std_alpha*np.repeat((A*B)[np.newaxis, :], X_sim.shape[0], axis=0)
 
         # Make simulated Y's
-        # print(type(alpha_sim),alpha_sim.shape)
-        # print(type(X_sim),X_sim.shape)
-        # print(type(self._coeff.values),self._coeff_)
         Y_sim = alpha_sim + X_sim.dot(betas) + error_sim
         return Y_sim.astype(np.float64),X_sim.astype(np.float64)
 

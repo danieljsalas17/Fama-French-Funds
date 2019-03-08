@@ -1,0 +1,3453 @@
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 5 columns):
+Mkt-RF    239 non-null float64
+HML       239 non-null float64
+SMB       239 non-null float64
+RF        239 non-null float64
+Mom       239 non-null float64
+dtypes: float64(5)
+memory usage: 11.2 KB
+None
+--------------------------
+Starting US OE Large Blend
+--------------------------
+-------------
+Funds,Factors
+-------------
+(239, 938) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 938 entries, ALBAX to CZOVX
+dtypes: float64(938)
+memory usage: 1.7 MB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 622.65 ms
+First Fund's coeffs and SE's:
+[ 0.08321697  0.72456352 -0.05427912 -0.05056103  0.04696465] [0.07637005 0.02986999 0.03572877 0.02610795 0.01688949]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 927,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 927,000 regressions...
+Simulations complete in 410.914 seconds!
+(927, 1000) (927, 1000)
+[ 0.00408819  0.00136592  0.00311087 -0.029784   -0.02825375] [0.07421364 0.0739492  0.07422953 0.08168409 0.08131578]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 927,000 regressions...
+Simulations complete in 405.668 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 927,000 regressions...
+Simulations complete in 397.168 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 927,000 regressions...
+Simulations complete in 400.639 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 927,000 regressions...
+Simulations complete in 396.239 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 927,000 regressions...
+Simulations complete in 395.044 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 927,000 regressions...
+Simulations complete in 382.427 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 927,000 regressions...
+Simulations complete in 398.190 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 927,000 regressions...
+Simulations complete in 375.440 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 927,000 regressions...
+Simulations complete in 379.502 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 927,000 regressions...
+Simulations complete in 381.451 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 927,000 regressions...
+Simulations complete in 399.699 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 927,000 regressions...
+Simulations complete in 376.965 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 927,000 regressions...
+Simulations complete in 384.323 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 927,000 regressions...
+Simulations complete in 385.790 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 927,000 regressions...
+Simulations complete in 380.992 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Large Blend data took 105 minutes and 56.15 seconds 
+--------------------------
+Starting US OE Large Value
+--------------------------
+-------------
+Funds,Factors
+-------------
+(239, 808) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 808 entries, AUIAX to DTLVX
+dtypes: float64(808)
+memory usage: 1.5 MB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 460.93 ms
+First Fund's coeffs and SE's:
+[ 0.18413806  0.7320027   0.14325001 -0.17252146  0.11562171] [0.15244014 0.04596684 0.07133949 0.04907501 0.03588248]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 806,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 806,000 regressions...
+Simulations complete in 326.194 seconds!
+(806, 1000) (806, 1000)
+[-0.09374931 -0.08921453 -0.08819581 -0.09055441 -0.09078482] [0.14223548 0.1421131  0.14196341 0.14235046 0.14215909]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 806,000 regressions...
+Simulations complete in 316.761 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 806,000 regressions...
+Simulations complete in 318.446 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 806,000 regressions...
+Simulations complete in 328.038 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 806,000 regressions...
+Simulations complete in 327.252 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 806,000 regressions...
+Simulations complete in 323.180 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 806,000 regressions...
+Simulations complete in 334.019 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 806,000 regressions...
+Simulations complete in 324.354 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 806,000 regressions...
+Simulations complete in 342.416 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 806,000 regressions...
+Simulations complete in 333.905 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 806,000 regressions...
+Simulations complete in 315.139 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 806,000 regressions...
+Simulations complete in 341.415 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 806,000 regressions...
+Simulations complete in 339.381 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 806,000 regressions...
+Simulations complete in 324.113 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 806,000 regressions...
+Simulations complete in 320.220 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 806,000 regressions...
+Simulations complete in 312.579 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Large Value data took 88 minutes and 52.11 seconds 
+---------------------------
+Starting US OE Large Growth
+---------------------------
+-------------
+Funds,Factors
+-------------
+(239, 963) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 963 entries, WPASX to DTLGX
+dtypes: float64(963)
+memory usage: 1.8 MB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 460.90 ms
+First Fund's coeffs and SE's:
+[ 0.0323163   0.9031288   0.02256723 -0.2226444   0.01010111] [0.12129331 0.03240071 0.05409254 0.06531619 0.03574793]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 961,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 961,000 regressions...
+Simulations complete in 400.076 seconds!
+(961, 1000) (961, 1000)
+[-0.1067634  -0.10643872 -0.10620855 -0.10671989 -0.10635737] [0.11847915 0.11853999 0.11832515 0.11849851 0.11845562]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 961,000 regressions...
+Simulations complete in 413.749 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 961,000 regressions...
+Simulations complete in 432.238 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 961,000 regressions...
+Simulations complete in 414.811 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 961,000 regressions...
+Simulations complete in 399.870 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 961,000 regressions...
+Simulations complete in 414.481 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 961,000 regressions...
+Simulations complete in 416.075 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 961,000 regressions...
+Simulations complete in 400.354 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 961,000 regressions...
+Simulations complete in 428.729 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 961,000 regressions...
+Simulations complete in 416.951 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 961,000 regressions...
+Simulations complete in 402.272 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 961,000 regressions...
+Simulations complete in 409.525 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 961,000 regressions...
+Simulations complete in 418.464 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 961,000 regressions...
+Simulations complete in 424.480 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 961,000 regressions...
+Simulations complete in 417.085 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 961,000 regressions...
+Simulations complete in 411.469 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Large Growth data took 112 minutes and 6.06 seconds 
+-----------------------------
+Starting US OE Mid-Cap Growth
+-----------------------------
+-------------
+Funds,Factors
+-------------
+(239, 449) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 449 entries, CHCLX to WSMNX
+dtypes: float64(449)
+memory usage: 840.2 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 233.30 ms
+First Fund's coeffs and SE's:
+[ 0.01893856  1.20088257 -0.08946099  0.27608382 -0.07918375] [0.17166617 0.05274357 0.09164704 0.10834519 0.06977066]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 447,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 447,000 regressions...
+Simulations complete in 182.221 seconds!
+(447, 1000) (447, 1000)
+[0.01635198 0.0086801  0.01339392 0.00931128 0.00985735] [0.18778792 0.18758057 0.1865312  0.1877916  0.18713584]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 447,000 regressions...
+Simulations complete in 184.643 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 447,000 regressions...
+Simulations complete in 181.233 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 447,000 regressions...
+Simulations complete in 182.354 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 447,000 regressions...
+Simulations complete in 190.620 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 447,000 regressions...
+Simulations complete in 183.683 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 447,000 regressions...
+Simulations complete in 185.939 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 447,000 regressions...
+Simulations complete in 184.854 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 447,000 regressions...
+Simulations complete in 181.685 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 447,000 regressions...
+Simulations complete in 183.325 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 447,000 regressions...
+Simulations complete in 187.966 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 447,000 regressions...
+Simulations complete in 185.056 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 447,000 regressions...
+Simulations complete in 191.846 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 447,000 regressions...
+Simulations complete in 187.522 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 447,000 regressions...
+Simulations complete in 185.198 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 447,000 regressions...
+Simulations complete in 179.317 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Mid-Cap Growth data took 50 minutes and 57.44 seconds 
+--------------------------
+Starting US OE Small Value
+--------------------------
+-------------
+Funds,Factors
+-------------
+(239, 304) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 304 entries, ABASX to WPGTX
+dtypes: float64(304)
+memory usage: 569.5 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 242.52 ms
+First Fund's coeffs and SE's:
+[ 0.08882104  1.01391498  0.41682327  0.51163401 -0.04460614] [0.10340328 0.03074868 0.04775387 0.03766005 0.03672868]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 298,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 298,000 regressions...
+Simulations complete in 117.776 seconds!
+(298, 1000) (298, 1000)
+[-0.09056526 -0.09204792 -0.09008231 -0.08957575 -0.08957316] [0.08539086 0.08552946 0.08579741 0.08563094 0.08533059]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 298,000 regressions...
+Simulations complete in 113.577 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 298,000 regressions...
+Simulations complete in 119.667 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 298,000 regressions...
+Simulations complete in 115.325 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 298,000 regressions...
+Simulations complete in 118.042 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 298,000 regressions...
+Simulations complete in 112.044 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 298,000 regressions...
+Simulations complete in 114.370 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 298,000 regressions...
+Simulations complete in 116.455 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 298,000 regressions...
+Simulations complete in 116.180 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 298,000 regressions...
+Simulations complete in 114.604 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 298,000 regressions...
+Simulations complete in 111.066 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 298,000 regressions...
+Simulations complete in 115.519 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 298,000 regressions...
+Simulations complete in 115.582 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 298,000 regressions...
+Simulations complete in 118.421 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 298,000 regressions...
+Simulations complete in 116.168 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 298,000 regressions...
+Simulations complete in 111.512 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Small Value data took 32 minutes and 27.89 seconds 
+----------------------------
+Starting US OE Mid-Cap Value
+----------------------------
+-------------
+Funds,Factors
+-------------
+(239, 268) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 268 entries, PQNAX to WFPRX
+dtypes: float64(268)
+memory usage: 502.3 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 237.28 ms
+First Fund's coeffs and SE's:
+[ 0.24029117  0.97641491  0.35435358 -0.02536866 -0.13037415] [0.17313411 0.04786436 0.08973646 0.06582385 0.04899387]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 265,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 265,000 regressions...
+Simulations complete in 104.014 seconds!
+(265, 1000) (265, 1000)
+[0.02425551 0.02641056 0.02298967 0.02380132 0.02727572] [0.13653789 0.13639667 0.13663647 0.1366305  0.13564192]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 265,000 regressions...
+Simulations complete in 97.388 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 265,000 regressions...
+Simulations complete in 101.310 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 265,000 regressions...
+Simulations complete in 99.828 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 265,000 regressions...
+Simulations complete in 95.100 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 265,000 regressions...
+Simulations complete in 96.561 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 265,000 regressions...
+Simulations complete in 103.766 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 265,000 regressions...
+Simulations complete in 97.303 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 265,000 regressions...
+Simulations complete in 95.287 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 265,000 regressions...
+Simulations complete in 101.889 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 265,000 regressions...
+Simulations complete in 100.765 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 265,000 regressions...
+Simulations complete in 100.198 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 265,000 regressions...
+Simulations complete in 99.244 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 265,000 regressions...
+Simulations complete in 99.782 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 265,000 regressions...
+Simulations complete in 103.836 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 265,000 regressions...
+Simulations complete in 103.483 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Mid-Cap Value data took 28 minutes and 19.45 seconds 
+---------------------------
+Starting US OE Small Growth
+---------------------------
+-------------
+Funds,Factors
+-------------
+(239, 502) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 502 entries, QUASX to WSMGX
+dtypes: float64(502)
+memory usage: 939.2 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 343.21 ms
+First Fund's coeffs and SE's:
+[-0.10569177  1.17590888 -0.05506409  0.61679211  0.04832661] [0.15263659 0.04933951 0.07621364 0.08885009 0.05494223]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 499,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 499,000 regressions...
+Simulations complete in 198.718 seconds!
+(499, 1000) (499, 1000)
+[0.06117247 0.06069662 0.06144071 0.06252507 0.06347104] [0.1309415  0.13102934 0.13100664 0.13063595 0.13115335]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 499,000 regressions...
+Simulations complete in 202.227 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 499,000 regressions...
+Simulations complete in 206.396 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 499,000 regressions...
+Simulations complete in 195.745 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 499,000 regressions...
+Simulations complete in 194.707 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 499,000 regressions...
+Simulations complete in 195.222 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 499,000 regressions...
+Simulations complete in 194.544 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 499,000 regressions...
+Simulations complete in 207.112 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 499,000 regressions...
+Simulations complete in 213.061 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 499,000 regressions...
+Simulations complete in 197.532 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 499,000 regressions...
+Simulations complete in 201.427 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 499,000 regressions...
+Simulations complete in 209.479 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 499,000 regressions...
+Simulations complete in 195.031 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 499,000 regressions...
+Simulations complete in 199.435 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 499,000 regressions...
+Simulations complete in 200.475 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 499,000 regressions...
+Simulations complete in 201.836 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Small Growth data took 55 minutes and 13.70 seconds 
+--------------------------
+Starting US OE Small Blend
+--------------------------
+-------------
+Funds,Factors
+-------------
+(239, 453) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 453 entries, ACMFX to DTSVX
+dtypes: float64(453)
+memory usage: 847.7 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 251.63 ms
+First Fund's coeffs and SE's:
+[-0.22008851  1.02821235 -0.17257229  0.14333036  0.14659063] [0.17006451 0.05477116 0.09617098 0.07163924 0.03629207]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 449,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 449,000 regressions...
+Simulations complete in 179.692 seconds!
+(449, 1000) (449, 1000)
+[0.15344876 0.15275246 0.15423778 0.15595365 0.15243574] [0.14219294 0.14211748 0.14222824 0.14175213 0.1421135 ]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 449,000 regressions...
+Simulations complete in 182.098 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 449,000 regressions...
+Simulations complete in 179.468 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 449,000 regressions...
+Simulations complete in 184.163 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 449,000 regressions...
+Simulations complete in 176.443 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 449,000 regressions...
+Simulations complete in 182.422 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 449,000 regressions...
+Simulations complete in 188.694 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 449,000 regressions...
+Simulations complete in 180.880 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 449,000 regressions...
+Simulations complete in 185.151 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 449,000 regressions...
+Simulations complete in 179.091 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 449,000 regressions...
+Simulations complete in 172.234 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 449,000 regressions...
+Simulations complete in 181.673 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 449,000 regressions...
+Simulations complete in 183.750 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 449,000 regressions...
+Simulations complete in 181.527 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 449,000 regressions...
+Simulations complete in 182.190 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 449,000 regressions...
+Simulations complete in 181.760 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Small Blend data took 50 minutes and 3.31 seconds 
+-------------------------
+Starting US OE Technology
+-------------------------
+-------------
+Funds,Factors
+-------------
+(239, 114) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 114 entries, BFOCX to WIREX
+dtypes: float64(114)
+memory usage: 214.7 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 122.91 ms
+First Fund's coeffs and SE's:
+[ 0.13202534  1.7091138  -1.42447414  0.45140066 -0.08921637] [0.39578274 0.11970295 0.17703073 0.16059336 0.13357495]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 114,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 114,000 regressions...
+Simulations complete in 48.698 seconds!
+(114, 1000) (114, 1000)
+[0.72316258 0.21378838 0.14222878 0.14034767 0.14244997] [0.39287497 0.27791613 0.18642803 0.18636168 0.18577544]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 114,000 regressions...
+Simulations complete in 48.878 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 114,000 regressions...
+Simulations complete in 49.574 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 114,000 regressions...
+Simulations complete in 49.286 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 114,000 regressions...
+Simulations complete in 46.605 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 114,000 regressions...
+Simulations complete in 47.399 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 114,000 regressions...
+Simulations complete in 46.050 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 114,000 regressions...
+Simulations complete in 48.940 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 114,000 regressions...
+Simulations complete in 47.155 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 114,000 regressions...
+Simulations complete in 48.604 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 114,000 regressions...
+Simulations complete in 48.878 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 114,000 regressions...
+Simulations complete in 48.342 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 114,000 regressions...
+Simulations complete in 49.276 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 114,000 regressions...
+Simulations complete in 47.695 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 114,000 regressions...
+Simulations complete in 49.746 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 114,000 regressions...
+Simulations complete in 50.567 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Technology data took 14 minutes and 32.44 seconds 
+---------------------
+Starting US OE Health
+---------------------
+-------------
+Funds,Factors
+-------------
+(239, 68) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 68 columns):
+AHSAX    200 non-null float64
+AHSCX    200 non-null float64
+AHSZX    200 non-null float64
+SHSSX    229 non-null float64
+SHSAX    229 non-null float64
+SHSCX    229 non-null float64
+SHSKX    229 non-null float64
+BHSRX    229 non-null float64
+SHISX    229 non-null float64
+SUHAX    239 non-null float64
+SUHCX    239 non-null float64
+SUHIX    239 non-null float64
+SCHLX    239 non-null float64
+FBTAX    217 non-null float64
+FBTCX    217 non-null float64
+FBTIX    217 non-null float64
+FBTTX    217 non-null float64
+FIJYX    217 non-null float64
+FACDX    239 non-null float64
+FHCCX    239 non-null float64
+FHCIX    239 non-null float64
+FACTX    239 non-null float64
+FIKCX    239 non-null float64
+FBIOX    239 non-null float64
+FSPHX    239 non-null float64
+FSHCX    239 non-null float64
+FSMEX    239 non-null float64
+FPHAX    211 non-null float64
+FBDIX    239 non-null float64
+FTDZX    239 non-null float64
+FBTDX    239 non-null float64
+FRBRX    239 non-null float64
+ICHAX    239 non-null float64
+ICHCX    239 non-null float64
+KRXAX    232 non-null float64
+KRXCX    232 non-null float64
+MEDRX    232 non-null float64
+LOGSX    211 non-null float64
+PDFDX    239 non-null float64
+PHLAX    235 non-null float64
+PHLBX    235 non-null float64
+PHLCX    235 non-null float64
+PJHRX    235 non-null float64
+PHLQX    235 non-null float64
+PHSZX    235 non-null float64
+PHSTX    239 non-null float64
+PHSBX    239 non-null float64
+PCHSX    239 non-null float64
+PHLMX    239 non-null float64
+PHSRX    239 non-null float64
+PHSYX    239 non-null float64
+RYBOX    239 non-null float64
+RYCFX    239 non-null float64
+RYOAX    239 non-null float64
+RYOIX    239 non-null float64
+RYHEX    239 non-null float64
+RYHCX    239 non-null float64
+RYHAX    239 non-null float64
+RYHIX    239 non-null float64
+SHPAX    234 non-null float64
+SHPCX    234 non-null float64
+SBHIX    234 non-null float64
+SWHFX    223 non-null float64
+PRHSX    239 non-null float64
+THISX    239 non-null float64
+VGHAX    239 non-null float64
+VHCIX    180 non-null float64
+VGHCX    239 non-null float64
+dtypes: float64(68)
+memory usage: 128.8 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 283.48 ms
+First Fund's coeffs and SE's:
+[ 0.39000054  0.80297316 -0.35965477  0.33486374  0.08799069] [0.21179598 0.06404591 0.10613393 0.10707238 0.05043506]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 68,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 68,000 regressions...
+Simulations complete in 28.844 seconds!
+(68, 1000) (68, 1000)
+[-0.20874334 -0.20690973 -0.2078913  -0.12695281 -0.12660017] [0.19662039 0.19665419 0.19641467 0.172317   0.17239285]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 68,000 regressions...
+Simulations complete in 29.089 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 68,000 regressions...
+Simulations complete in 29.449 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 68,000 regressions...
+Simulations complete in 28.853 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 68,000 regressions...
+Simulations complete in 28.093 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 68,000 regressions...
+Simulations complete in 29.959 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 68,000 regressions...
+Simulations complete in 29.455 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 68,000 regressions...
+Simulations complete in 30.852 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 68,000 regressions...
+Simulations complete in 29.926 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 68,000 regressions...
+Simulations complete in 29.561 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 68,000 regressions...
+Simulations complete in 28.937 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 68,000 regressions...
+Simulations complete in 28.486 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 68,000 regressions...
+Simulations complete in 28.849 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 68,000 regressions...
+Simulations complete in 29.131 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 68,000 regressions...
+Simulations complete in 29.833 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 68,000 regressions...
+Simulations complete in 28.709 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Health data took 9 minutes and 25.11 seconds 
+------------------------
+Starting US OE Financial
+------------------------
+-------------
+Funds,Factors
+-------------
+(239, 67) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 67 columns):
+SBFAX                                239 non-null float64
+SFSLX                                239 non-null float64
+LMRIX                                239 non-null float64
+RPFGX                                239 non-null float64
+DFFCX                                239 non-null float64
+DVFYX                                239 non-null float64
+BANCX                                239 non-null float64
+BSGCX                                239 non-null float64
+DHFSX                                239 non-null float64
+HSSAX                                239 non-null float64
+HSSCX                                239 non-null float64
+HSSIX                                239 non-null float64
+FFBFX                                239 non-null float64
+FAFDX                                239 non-null float64
+FAFCX                                239 non-null float64
+FFSIX                                239 non-null float64
+FAFSX                                239 non-null float64
+FIKBX                                239 non-null float64
+FSRBX                                239 non-null float64
+FSLBX                                239 non-null float64
+FSVLX                                239 non-null float64
+FIDSX                                239 non-null float64
+FSPCX                                239 non-null float64
+TFSIX                                239 non-null float64
+TMFSX                                239 non-null float64
+FMFVX                                239 non-null float64
+TEFAX                                239 non-null float64
+HILFX                                239 non-null float64
+HLFNX                                239 non-null float64
+HISFX                                239 non-null float64
+HSFNX                                239 non-null float64
+ICFAX                                239 non-null float64
+ICFSX                                239 non-null float64
+FIDAX                                239 non-null float64
+FIDBX                                239 non-null float64
+FIDCX                                239 non-null float64
+JFIFX                                239 non-null float64
+JHancock Financial Industries NAV    239 non-null float64
+JFDRX                                239 non-null float64
+FRBAX                                239 non-null float64
+FRBFX                                239 non-null float64
+FRBCX                                239 non-null float64
+JRBFX                                239 non-null float64
+JRGRX                                239 non-null float64
+PFSAX                                235 non-null float64
+PUFBX                                235 non-null float64
+PUFCX                                235 non-null float64
+PSSRX                                235 non-null float64
+PFSQX                                235 non-null float64
+PFSZX                                235 non-null float64
+RMBKX                                235 non-null float64
+RMBNX                                235 non-null float64
+RMBLX                                235 non-null float64
+RYBKX                                239 non-null float64
+RYKCX                                239 non-null float64
+RYKAX                                239 non-null float64
+RYKIX                                239 non-null float64
+RYFNX                                239 non-null float64
+RYFCX                                239 non-null float64
+RYFAX                                239 non-null float64
+RYFIX                                239 non-null float64
+SFPAX                                221 non-null float64
+SFPCX                                221 non-null float64
+SFPIX                                221 non-null float64
+PRISX                                239 non-null float64
+TFIFX                                239 non-null float64
+VFAIX                                180 non-null float64
+dtypes: float64(67)
+memory usage: 127.0 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 129.59 ms
+First Fund's coeffs and SE's:
+[ 0.12417417  0.75193728  0.61343273 -0.00956012  0.05265944] [0.14341896 0.04529158 0.06794033 0.07734145 0.03875178]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 67,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 67,000 regressions...
+Simulations complete in 31.095 seconds!
+(67, 1000) (67, 1000)
+[-0.06220589 -0.06184738 -0.06218328 -0.02977162 -0.03115053] [0.13578682 0.13556756 0.13571064 0.12015755 0.12022785]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 67,000 regressions...
+Simulations complete in 29.127 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 67,000 regressions...
+Simulations complete in 30.744 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 67,000 regressions...
+Simulations complete in 30.760 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 67,000 regressions...
+Simulations complete in 30.862 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 67,000 regressions...
+Simulations complete in 30.013 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 67,000 regressions...
+Simulations complete in 30.004 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 67,000 regressions...
+Simulations complete in 29.102 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 67,000 regressions...
+Simulations complete in 30.431 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 67,000 regressions...
+Simulations complete in 30.073 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 67,000 regressions...
+Simulations complete in 29.681 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 67,000 regressions...
+Simulations complete in 28.953 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 67,000 regressions...
+Simulations complete in 29.902 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 67,000 regressions...
+Simulations complete in 30.946 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 67,000 regressions...
+Simulations complete in 30.094 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 67,000 regressions...
+Simulations complete in 28.845 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Financial data took 9 minutes and 36.40 seconds 
+----------------------------
+Starting US OE Mid-Cap Blend
+----------------------------
+-------------
+Funds,Factors
+-------------
+(239, 277) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Columns: 277 entries, AVEMX to WHGMX
+dtypes: float64(277)
+memory usage: 519.1 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 234.32 ms
+First Fund's coeffs and SE's:
+[-0.07247504  0.89387782  0.23429486  0.34973433 -0.06361345] [0.11369871 0.04509563 0.05268159 0.05542967 0.03368165]
+-----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 277,000 ALPHAS
+-----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 277,000 regressions...
+Simulations complete in 108.275 seconds!
+(277, 1000) (277, 1000)
+[-0.01598668  0.05806933  0.2230222   0.22248751  0.13561615] [0.09937517 0.19383582 0.14721626 0.1471882  0.21342476]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 277,000 regressions...
+Simulations complete in 107.110 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 277,000 regressions...
+Simulations complete in 106.390 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 277,000 regressions...
+Simulations complete in 107.154 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 277,000 regressions...
+Simulations complete in 108.277 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 277,000 regressions...
+Simulations complete in 107.909 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 277,000 regressions...
+Simulations complete in 100.909 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 277,000 regressions...
+Simulations complete in 100.956 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 277,000 regressions...
+Simulations complete in 100.114 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 277,000 regressions...
+Simulations complete in 106.509 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 277,000 regressions...
+Simulations complete in 100.861 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 277,000 regressions...
+Simulations complete in 100.519 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 277,000 regressions...
+Simulations complete in 107.684 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 277,000 regressions...
+Simulations complete in 103.122 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 277,000 regressions...
+Simulations complete in 103.436 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 277,000 regressions...
+Simulations complete in 101.378 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Mid-Cap Blend data took 29 minutes and 31.55 seconds 
+------------------------
+Starting US OE Utilities
+------------------------
+-------------
+Funds,Factors
+-------------
+(239, 52) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 52 columns):
+BULIX    239 non-null float64
+FUGAX    239 non-null float64
+FUGCX    239 non-null float64
+FUGIX    239 non-null float64
+FAUFX    239 non-null float64
+FIKIX    13 non-null float64
+FSUTX    239 non-null float64
+FIUIX    239 non-null float64
+FKUTX    239 non-null float64
+FRUAX    239 non-null float64
+FRUSX    239 non-null float64
+FKUQX    239 non-null float64
+FRURX    239 non-null float64
+FUFRX    239 non-null float64
+GAUAX    233 non-null float64
+GABUX    233 non-null float64
+GAUCX    233 non-null float64
+GAUIX    233 non-null float64
+HGASX    239 non-null float64
+GASFX    239 non-null float64
+ICTVX    239 non-null float64
+ICTUX    239 non-null float64
+MMUFX    239 non-null float64
+MMUBX    239 non-null float64
+MMUCX    239 non-null float64
+MMUIX    239 non-null float64
+MMUGX    239 non-null float64
+MURRX    239 non-null float64
+MMUHX    239 non-null float64
+MMUJX    239 non-null float64
+MMUKX    239 non-null float64
+PRUAX    239 non-null float64
+PRUTX    239 non-null float64
+PCUFX    239 non-null float64
+JDURX    239 non-null float64
+PRUQX    239 non-null float64
+PRUZX    239 non-null float64
+PUGIX    239 non-null float64
+PUTBX    239 non-null float64
+PUTCX    239 non-null float64
+PUTMX    239 non-null float64
+PULRX    239 non-null float64
+PUTYX    239 non-null float64
+RYUTX    225 non-null float64
+RYCUX    225 non-null float64
+RYAUX    225 non-null float64
+RYUIX    225 non-null float64
+VUIAX    180 non-null float64
+EVUAX    239 non-null float64
+EVUDX    239 non-null float64
+EVUCX    239 non-null float64
+EVUYX    239 non-null float64
+dtypes: float64(52)
+memory usage: 99.0 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 131.06 ms
+First Fund's coeffs and SE's:
+[ 0.14297957  0.63614785  0.0500334  -0.23210661  0.07529415] [0.19003824 0.04701632 0.05698333 0.0539774  0.03178192]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 51,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 51,000 regressions...
+Simulations complete in 22.949 seconds!
+(51, 1000) (51, 1000)
+[-0.01942122 -0.00492275 -0.00430444 -0.00783586 -0.00334931] [0.16925434 0.19413821 0.19405885 0.19427153 0.19405139]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 51,000 regressions...
+Simulations complete in 23.671 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 51,000 regressions...
+Simulations complete in 23.007 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 51,000 regressions...
+Simulations complete in 22.069 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 51,000 regressions...
+Simulations complete in 22.998 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 51,000 regressions...
+Simulations complete in 22.241 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 51,000 regressions...
+Simulations complete in 22.109 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 51,000 regressions...
+Simulations complete in 21.975 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 51,000 regressions...
+Simulations complete in 24.317 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 51,000 regressions...
+Simulations complete in 22.828 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 51,000 regressions...
+Simulations complete in 23.216 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 51,000 regressions...
+Simulations complete in 22.417 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 51,000 regressions...
+Simulations complete in 22.273 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 51,000 regressions...
+Simulations complete in 22.730 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 51,000 regressions...
+Simulations complete in 22.597 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 51,000 regressions...
+Simulations complete in 22.171 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Utilities data took 7 minutes and 38.41 seconds 
+--------------------------------
+Starting US OE Natural Resources
+--------------------------------
+-------------
+Funds,Factors
+-------------
+(239, 41) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 41 columns):
+EENAX    239 non-null float64
+CENRX    239 non-null float64
+EENCX    239 non-null float64
+UMESX    239 non-null float64
+CNRRX    239 non-null float64
+CGEYX    239 non-null float64
+CETRX    239 non-null float64
+DNLAX    183 non-null float64
+DLDCX    183 non-null float64
+DLDRX    183 non-null float64
+DLDYX    183 non-null float64
+FMFAX    239 non-null float64
+FMFCX    239 non-null float64
+FMFEX    239 non-null float64
+FMFTX    239 non-null float64
+FIJFX    239 non-null float64
+FSCHX    239 non-null float64
+FSDPX    239 non-null float64
+FRNRX    239 non-null float64
+FNRAX    239 non-null float64
+FNCRX    239 non-null float64
+FNCSX    239 non-null float64
+ICBAX    239 non-null float64
+ICBCX    239 non-null float64
+ICBMX    239 non-null float64
+PGNAX    239 non-null float64
+PRGNX    239 non-null float64
+PNRCX    239 non-null float64
+JNRRX    239 non-null float64
+PJNQX    239 non-null float64
+PNRZX    239 non-null float64
+RYBMX    239 non-null float64
+RYBCX    239 non-null float64
+RYBAX    239 non-null float64
+RYBIX    239 non-null float64
+SBMBX    239 non-null float64
+SEPCX    239 non-null float64
+SEPIX    239 non-null float64
+PRNEX    239 non-null float64
+TRNEX    239 non-null float64
+VMIAX    180 non-null float64
+dtypes: float64(41)
+memory usage: 78.4 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 128.56 ms
+First Fund's coeffs and SE's:
+[0.15050626 1.00496856 0.33491474 0.03687973 0.10904745] [0.32530487 0.100571   0.14444063 0.1283146  0.08053745]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 41,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 41,000 regressions...
+Simulations complete in 17.841 seconds!
+(41, 1000) (41, 1000)
+[0.04683588 0.04896154 0.04838994 0.04855159 0.04874253] [0.33505708 0.33517027 0.33498751 0.33524386 0.33511122]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 41,000 regressions...
+Simulations complete in 18.084 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 41,000 regressions...
+Simulations complete in 17.362 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 41,000 regressions...
+Simulations complete in 18.053 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 41,000 regressions...
+Simulations complete in 17.712 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 41,000 regressions...
+Simulations complete in 18.511 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 41,000 regressions...
+Simulations complete in 18.123 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 41,000 regressions...
+Simulations complete in 18.456 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 41,000 regressions...
+Simulations complete in 18.709 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 41,000 regressions...
+Simulations complete in 18.117 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 41,000 regressions...
+Simulations complete in 17.612 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 41,000 regressions...
+Simulations complete in 17.915 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 41,000 regressions...
+Simulations complete in 17.258 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 41,000 regressions...
+Simulations complete in 17.593 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 41,000 regressions...
+Simulations complete in 18.659 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 41,000 regressions...
+Simulations complete in 18.187 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Natural Resources data took 6 minutes and 23.21 seconds 
+----------------------------
+Starting US OE Equity Energy
+----------------------------
+-------------
+Funds,Factors
+-------------
+(239, 39) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 39 columns):
+FANAX    239 non-null float64
+FNRCX    239 non-null float64
+FANIX    239 non-null float64
+FAGNX    239 non-null float64
+FIKAX    239 non-null float64
+FSENX    239 non-null float64
+FSESX    239 non-null float64
+FSNGX    239 non-null float64
+FNARX    239 non-null float64
+ICEAX    239 non-null float64
+ICEEX    239 non-null float64
+ICENX    239 non-null float64
+IENAX    239 non-null float64
+IEFCX    239 non-null float64
+FSTEX    239 non-null float64
+IENIX    239 non-null float64
+IENSX    239 non-null float64
+IENYX    239 non-null float64
+IEYAX    153 non-null float64
+IEYBX    153 non-null float64
+IEYCX    153 non-null float64
+IVEIX    153 non-null float64
+IENRX    153 non-null float64
+IYEFX    153 non-null float64
+IEYYX    153 non-null float64
+OEPIX    151 non-null float64
+OEPSX    151 non-null float64
+RYENX    239 non-null float64
+RYECX    239 non-null float64
+RYEAX    239 non-null float64
+RYEIX    239 non-null float64
+RYESX    239 non-null float64
+RYVCX    239 non-null float64
+RYVAX    239 non-null float64
+RYVIX    239 non-null float64
+VENAX    172 non-null float64
+ICPAX    237 non-null float64
+ICPUX    237 non-null float64
+ICWIX    237 non-null float64
+dtypes: float64(39)
+memory usage: 74.7 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 122.19 ms
+First Fund's coeffs and SE's:
+[0.11408081 1.06132246 0.4142379  0.08290258 0.02209009] [0.35776446 0.11029949 0.14830437 0.12287987 0.08680572]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 39,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 39,000 regressions...
+Simulations complete in 15.687 seconds!
+(39, 1000) (39, 1000)
+[0.08170417 0.08102034 0.08063223 0.08168086 0.08191814] [0.37197259 0.37145824 0.37187148 0.37175169 0.37175147]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 39,000 regressions...
+Simulations complete in 15.494 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 39,000 regressions...
+Simulations complete in 15.433 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 39,000 regressions...
+Simulations complete in 15.579 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 39,000 regressions...
+Simulations complete in 16.230 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 39,000 regressions...
+Simulations complete in 14.903 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 39,000 regressions...
+Simulations complete in 14.919 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 39,000 regressions...
+Simulations complete in 14.879 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 39,000 regressions...
+Simulations complete in 15.651 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 39,000 regressions...
+Simulations complete in 15.967 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 39,000 regressions...
+Simulations complete in 15.886 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 39,000 regressions...
+Simulations complete in 16.120 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 39,000 regressions...
+Simulations complete in 15.887 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 39,000 regressions...
+Simulations complete in 15.178 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 39,000 regressions...
+Simulations complete in 16.379 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 39,000 regressions...
+Simulations complete in 16.121 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Equity Energy data took 5 minutes and 44.64 seconds 
+--------------------------------
+Starting US OE Consumer Cyclical
+--------------------------------
+-------------
+Funds,Factors
+-------------
+(239, 27) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 27 columns):
+FGDMX    239 non-null float64
+FGHMX    239 non-null float64
+FGJMX    239 non-null float64
+FGEMX    239 non-null float64
+FGKMX    239 non-null float64
+FCNAX    239 non-null float64
+FCECX    239 non-null float64
+FCNIX    239 non-null float64
+FACPX    239 non-null float64
+FIJZX    239 non-null float64
+FSAVX    239 non-null float64
+FBMPX    239 non-null float64
+FSHOX    239 non-null float64
+FSCPX    239 non-null float64
+FDLSX    239 non-null float64
+FSRPX    239 non-null float64
+ICCAX    239 non-null float64
+ICCCX    239 non-null float64
+RYLSX    239 non-null float64
+RYLCX    239 non-null float64
+RYLAX    239 non-null float64
+RYLIX    239 non-null float64
+RYRTX    239 non-null float64
+RYRCX    239 non-null float64
+RYRAX    239 non-null float64
+RYRIX    239 non-null float64
+VCDAX    180 non-null float64
+dtypes: float64(27)
+memory usage: 52.3 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 132.46 ms
+First Fund's coeffs and SE's:
+[ 0.14669503  1.07729512 -0.00719648  0.0803891  -0.13646507] [0.16899229 0.04742294 0.05931418 0.0601621  0.04164097]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 27,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 27,000 regressions...
+Simulations complete in 12.587 seconds!
+(27, 1000) (27, 1000)
+[-0.12449858 -0.12444544 -0.12456554 -0.12453749 -0.12451758] [0.16805185 0.16794269 0.16807612 0.16800011 0.16808262]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 27,000 regressions...
+Simulations complete in 12.095 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 27,000 regressions...
+Simulations complete in 12.387 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 27,000 regressions...
+Simulations complete in 12.144 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 27,000 regressions...
+Simulations complete in 11.861 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 27,000 regressions...
+Simulations complete in 12.392 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 27,000 regressions...
+Simulations complete in 12.179 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 27,000 regressions...
+Simulations complete in 12.750 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 27,000 regressions...
+Simulations complete in 12.138 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 27,000 regressions...
+Simulations complete in 11.741 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 27,000 regressions...
+Simulations complete in 12.440 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 27,000 regressions...
+Simulations complete in 12.722 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 27,000 regressions...
+Simulations complete in 12.273 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 27,000 regressions...
+Simulations complete in 11.838 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 27,000 regressions...
+Simulations complete in 11.851 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 27,000 regressions...
+Simulations complete in 12.005 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Consumer Cyclical data took 4 minutes and 49.02 seconds 
+---------------------------------
+Starting US OE Consumer Defensive
+---------------------------------
+-------------
+Funds,Factors
+-------------
+(239, 13) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 13 columns):
+FDAGX    239 non-null float64
+FDCGX    239 non-null float64
+FDIGX    239 non-null float64
+FDTGX    239 non-null float64
+FIJCX    239 non-null float64
+FDFAX    239 non-null float64
+ICRAX    239 non-null float64
+ICLEX    239 non-null float64
+RYPDX    239 non-null float64
+RYCPX    239 non-null float64
+RYCAX    239 non-null float64
+RYCIX    239 non-null float64
+VCSAX    180 non-null float64
+dtypes: float64(13)
+memory usage: 26.1 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 126.30 ms
+First Fund's coeffs and SE's:
+[ 0.26223695  0.57831824  0.26857218 -0.27387305  0.05276692] [0.18280747 0.05557957 0.07754753 0.05695832 0.03940226]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 13,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 13,000 regressions...
+Simulations complete in 5.900 seconds!
+(13, 1000) (13, 1000)
+[-0.01504256 -0.01600539 -0.01614954 -0.01618026 -0.0155441 ] [0.16177793 0.16175252 0.1618291  0.16181755 0.16180912]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 13,000 regressions...
+Simulations complete in 6.106 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 13,000 regressions...
+Simulations complete in 5.639 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 13,000 regressions...
+Simulations complete in 5.583 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 13,000 regressions...
+Simulations complete in 6.043 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 13,000 regressions...
+Simulations complete in 5.571 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 13,000 regressions...
+Simulations complete in 5.818 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 13,000 regressions...
+Simulations complete in 5.694 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 13,000 regressions...
+Simulations complete in 5.927 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 13,000 regressions...
+Simulations complete in 5.894 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 13,000 regressions...
+Simulations complete in 5.959 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 13,000 regressions...
+Simulations complete in 6.028 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 13,000 regressions...
+Simulations complete in 5.991 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 13,000 regressions...
+Simulations complete in 5.857 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 13,000 regressions...
+Simulations complete in 5.559 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 13,000 regressions...
+Simulations complete in 5.678 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Consumer Defensive data took 3 minutes and 6.78 seconds 
+--------------------------
+Starting US OE Industrials
+--------------------------
+-------------
+Funds,Factors
+-------------
+(239, 17) (239, 5)
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 239 entries, 1999-03-01 to 2019-01-01
+Data columns (total 17 columns):
+FCLAX    239 non-null float64
+FCLCX    239 non-null float64
+FCLIX    239 non-null float64
+FCLTX    239 non-null float64
+FIKEX    239 non-null float64
+FSAIX    239 non-null float64
+FSDAX    239 non-null float64
+FSLEX    239 non-null float64
+FCYIX    239 non-null float64
+FSRFX    239 non-null float64
+ICIAX    239 non-null float64
+ICTRX    239 non-null float64
+RYTSX    239 non-null float64
+RYCNX    239 non-null float64
+RYPAX    239 non-null float64
+RYPIX    239 non-null float64
+VINAX    172 non-null float64
+dtypes: float64(17)
+memory usage: 33.6 KB
+None
+-------------------------------------------------------------
+MULTIPROCESSING: Get original coeffs,SEs and transformed Y,X.
+-------------------------------------------------------------
+Total time elapsed 123.38 ms
+First Fund's coeffs and SE's:
+[ 0.17925292  1.10839942  0.44567121  0.03565649 -0.05003451] [0.14336164 0.04378624 0.06732025 0.07469392 0.04399158]
+----------------------------------------------------------
+FIRST SIMULATION
+MULTIPROCESSING: SIMULATING 17,000 ALPHAS
+----------------------------------------------------------
+Annual standard deviation: 0.00, Monthly standard deviation alpha: 0.00
+Starting 17,000 regressions...
+Simulations complete in 7.829 seconds!
+(17, 1000) (17, 1000)
+[-0.37793678 -0.37677581 -0.37850053 -0.37663379 -0.3783804 ] [0.14337738 0.14325127 0.14320539 0.14330133 0.14322504]
+-----------
+PERCENTILES
+-----------
+Calculating percentiles of simulations... Populating data tables... Done!
+Plotting cdf,kde,and histograms
+--------------------------
+Standard Deviation 2 of 16
+--------------------------
+Annual standard deviation: 0.10, Monthly standard deviation alpha: 0.03
+Starting 17,000 regressions...
+Simulations complete in 7.656 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 3 of 16
+--------------------------
+Annual standard deviation: 0.20, Monthly standard deviation alpha: 0.06
+Starting 17,000 regressions...
+Simulations complete in 7.839 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 4 of 16
+--------------------------
+Annual standard deviation: 0.30, Monthly standard deviation alpha: 0.09
+Starting 17,000 regressions...
+Simulations complete in 7.572 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 5 of 16
+--------------------------
+Annual standard deviation: 0.40, Monthly standard deviation alpha: 0.12
+Starting 17,000 regressions...
+Simulations complete in 7.743 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 6 of 16
+--------------------------
+Annual standard deviation: 0.50, Monthly standard deviation alpha: 0.14
+Starting 17,000 regressions...
+Simulations complete in 7.375 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 7 of 16
+--------------------------
+Annual standard deviation: 0.60, Monthly standard deviation alpha: 0.17
+Starting 17,000 regressions...
+Simulations complete in 7.381 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 8 of 16
+--------------------------
+Annual standard deviation: 0.70, Monthly standard deviation alpha: 0.20
+Starting 17,000 regressions...
+Simulations complete in 7.524 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+--------------------------
+Standard Deviation 9 of 16
+--------------------------
+Annual standard deviation: 0.80, Monthly standard deviation alpha: 0.23
+Starting 17,000 regressions...
+Simulations complete in 7.312 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 10 of 16
+---------------------------
+Annual standard deviation: 0.90, Monthly standard deviation alpha: 0.26
+Starting 17,000 regressions...
+Simulations complete in 7.341 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 11 of 16
+---------------------------
+Annual standard deviation: 1.00, Monthly standard deviation alpha: 0.29
+Starting 17,000 regressions...
+Simulations complete in 7.988 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 12 of 16
+---------------------------
+Annual standard deviation: 1.10, Monthly standard deviation alpha: 0.32
+Starting 17,000 regressions...
+Simulations complete in 7.401 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 13 of 16
+---------------------------
+Annual standard deviation: 1.20, Monthly standard deviation alpha: 0.35
+Starting 17,000 regressions...
+Simulations complete in 7.684 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 14 of 16
+---------------------------
+Annual standard deviation: 1.30, Monthly standard deviation alpha: 0.38
+Starting 17,000 regressions...
+Simulations complete in 7.554 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 15 of 16
+---------------------------
+Annual standard deviation: 1.40, Monthly standard deviation alpha: 0.40
+Starting 17,000 regressions...
+Simulations complete in 8.042 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+---------------------------
+Standard Deviation 16 of 16
+---------------------------
+Annual standard deviation: 1.50, Monthly standard deviation alpha: 0.43
+Starting 17,000 regressions...
+Simulations complete in 7.675 seconds!
+Complete!
+Filling percentile tables...Calculating percentiles of simulations... Populating data tables... Done!
+Plotting...DONE!
+------------------
+END OF SIMULATIONS
+------------------
+Saved!
+US OE Industrials data took 3 minutes and 36.52 seconds 
+---------------------
+All simulations done!
+---------------------
+Entire program took 10 hours, 18 minutes, and 20.24 seconds

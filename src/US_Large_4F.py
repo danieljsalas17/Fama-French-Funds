@@ -123,12 +123,23 @@ if __name__ == "__main__":
                                statistic=['alpha','t-stat'],
                                betas=B,tstats=B/BSE,
                                alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
+                               data_a=data_a,data_t=data_t,fund=[-1,0],
+                               prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
+
+        fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(0.))
+        fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+        plt.savefig(path_stem+'charts/US/'+data_name+'/4factor-plots.png')
+
+        fig, axes = multi_plot(plot_type=['cdf','kde','hist'],
+                               statistic=['alpha','t-stat'],
+                               betas=B,tstats=B/BSE,
+                               alphas_sim=ALPH,tstats_sim=ALPH/A_SE,
                                data_a=data_a,data_t=data_t,fund=funds_hist,
                                prct_sim_a=prct_sim_a,prct_sim_t=prct_sim_t)
 
         fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(0.))
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-        plt.savefig(path_stem+'charts/US_Large'+data_name+'-4factor-plots-{}.png'.format(0))
+        plt.savefig(path_stem+'charts/US/'+data_name+'/4factor-plots-{}.png'.format(0))
         plt.clf()
         plt.close('all')
         #---------------------------------------------------------------------------
@@ -152,6 +163,8 @@ if __name__ == "__main__":
                                     prct_range=prct_range,top_n=top_n,tickers=txs)
 
             for col in data_a1.columns:
+                if col == 'Actual':
+                    continue
                 data_a[col+" ({:.2f})".format(stdev)] = data_a1[col]
                 data_t[col+" ({:.2f})".format(stdev)] = data_t1[col]
 
@@ -166,7 +179,7 @@ if __name__ == "__main__":
 
             fig.suptitle("Injected Standard Deviation of Alpha = {:.2f}".format(stdev))
             fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-            plt.savefig(path_stem+'charts/US/'+data_name+'/4factor-plots-{}.png'.format(i))
+            plt.savefig(path_stem+'charts/US/'+data_name+'/4factor-plots-{}.png'.format(i+1))
             plt.clf()
             plt.close('all')
             print("DONE!")
